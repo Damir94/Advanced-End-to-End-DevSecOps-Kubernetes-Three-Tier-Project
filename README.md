@@ -37,42 +37,43 @@ Before starting the project, ensure you have the following prerequisites:
 ## Step 1: We need to create an IAM user and generate the AWS Access key
 Create a new IAM User on AWS and give it AdministratorAccess for testing purposes (not recommended for your organisation's Projects)
 
-Go to the AWS IAM Service and click on Users.
+- Go to the AWS IAM Service and click on Users.
 
 <img width="1373" height="433" alt="Screenshot 2026-01-27 at 12 20 27 PM" src="https://github.com/user-attachments/assets/79c45545-9e3a-40be-bea5-fb7b57eac9b2" />
 
-Click on Create user
+- Click on Create user
 
 <img width="1502" height="372" alt="Screenshot 2026-01-27 at 12 21 20 PM" src="https://github.com/user-attachments/assets/e956ec1a-5209-4f4e-acc5-9e4a51c18255" />
-Provide the name to your user and click on Next.
+
+- Provide the name to your user and click on Next.
 
 <img width="1020" height="147" alt="Screenshot 2026-01-27 at 12 22 05 PM" src="https://github.com/user-attachments/assets/0c8d53e9-e51e-441e-8ef3-0ffa979f36d9" />
 
-Select the Attach policies directly option and search for AdministratorAccess, then select it.
+- Select the Attach policies directly option and search for AdministratorAccess, then select it.
 
 <img width="1497" height="447" alt="Screenshot 2026-01-27 at 12 23 16 PM" src="https://github.com/user-attachments/assets/aa6652d7-0f99-44d6-8549-144b9b3c5f9b" />
 
-Click on Create user
+- Click on Create user
 
 <img width="1539" height="678" alt="Screenshot 2026-01-27 at 12 24 10 PM" src="https://github.com/user-attachments/assets/00fc6650-4d81-48c6-81ae-3470d7bde26e" />
 
-Now, select your created user, then click on Security credentials and generate an access key by clicking on Create access key.
-Press enter or click to view image in full size
+- Now, select your created user, then click on Security credentials and generate an access key by clicking on Create access key.
+- Press enter or click to view image in full size
 
 <img width="1549" height="257" alt="Screenshot 2026-01-27 at 12 26 42 PM" src="https://github.com/user-attachments/assets/77e6b6e3-0624-405b-ae2b-7914f849455b" />
 
-Select the Command Line Interface (CLI), then select the check mark for the confirmation and click on Next.
+- Select the Command Line Interface (CLI), then select the check mark for the confirmation and click on Next.
 
 <img width="787" height="130" alt="Screenshot 2026-01-27 at 12 27 10 PM" src="https://github.com/user-attachments/assets/354f1432-e80c-4cb3-8cea-6c0749971b43" />
 
-Provide the Description and click on the Create access key.
+- Provide the Description and click on the Create access key.
 
 <img width="838" height="160" alt="Screenshot 2026-01-27 at 12 27 57 PM" src="https://github.com/user-attachments/assets/c765d123-1459-4fb5-a0f7-8f870ae6355a" />
 
-Here, you will see that you got the credentials, and you can also download the CSV file for the future.
+- Here, you will see that you got the credentials, and you can also download the CSV file for the future.
 
 ## Step 2: We will install Terraform & AWS CLI to deploy our Jenkins Server(EC2) on AWS.
-Install & Configure Terraform and AWS CLI on your local machine to create a Jenkins Server on AWS Cloud
+- Install & Configure Terraform and AWS CLI on your local machine to create a Jenkins Server on AWS Cloud
 
 ### Terraform Installation Script
 ```bash
@@ -88,57 +89,57 @@ sudo apt install unzip -y
 unzip awscliv2.zip
 sudo ./aws/install
 ```
-Now, configure both the tools
+- Now, configure both the tools
 
 ### Configure Terraform
-Edit the file /etc/environment using the below command, add the highlighted lines and add your keys in the blur space.
+- Edit the file /etc/environment using the below command, add the highlighted lines and add your keys in the blur space.
 ```bash
 sudo vim /etc/environment
 ```
-After making the changes, restart your machine to reflect the changes to your environment variables.
+- After making the changes, restart your machine to reflect the changes to your environment variables.
 
 ### Configure AWS CLI
-Run the below command, and add your keys
+- Run the below command, and add your keys
 ```bash
 aws configure
 ```
 
 ### Step 3: Deploy the Jenkins Server(EC2) using Terraform
-Clone the Git repository
+- Clone the Git repository
 ```bash
 https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project
 ```
-Navigate to the Jenkins-Server-TF
+- Navigate to the Jenkins-Server-TF
 
-Do some modifications to the backend.tf file, such as changing the bucket name and dynamodb table(make sure you have created both manually on AWS Cloud).
+- Do some modifications to the backend.tf file, such as changing the bucket name and dynamodb table(make sure you have created both manually on AWS Cloud).
 
-Now, you have to replace the PEM file name as you have some other name for your PEM file. To provide the PEM file name that is already created on AWS
+- Now, you have to replace the PEM file name as you have some other name for your PEM file. To provide the PEM file name that is already created on AWS
 
-Initialise the backend by running the command below
+- Initialise the backend by running the command below
 ```bash
 terraform init
 ```
-Run the command below to check the syntax error
+- Run the command below to check the syntax error
 ```bash
 terraform validate
 ```
-Run the below command to get the blueprint of what kind of AWS services will be created.
+- Run the below command to get the blueprint of what kind of AWS services will be created.
 ```bash
 terraform plan -var-file=variables.tfvars
 ```
-Now, run the below command to create the infrastructure on AWS Cloud, which will take 3 to 4 minutes maximum
+- Now, run the below command to create the infrastructure on AWS Cloud, which will take 3 to 4 minutes maximum
 ```bash
 terraform apply -var-file=variables.tfvars --auto-approve
 ```
-Now, connect to your Jenkins server by clicking on Connect.
+- Now, connect to your Jenkins server by clicking on Connect.
 
-Copy the SSH command and paste it on your local machine.
+- Copy the SSH command and paste it on your local machine.
 
 ### Step 4: Configure the Jenkins
-Now, we logged into our Jenkins server.
+- Now, we logged into our Jenkins server.
 
-We have installed some services such as Jenkins, Docker, Sonarqube, Terraform, Kubectl, AWS CLI, and Trivy.
-Let’s validate whether all our installed or not.
+- We have installed some services such as Jenkins, Docker, Sonarqube, Terraform, Kubectl, AWS CLI, and Trivy.
+- Let’s validate whether all our installed or not.
 ```bash
 jenkins --version
 docker --version
