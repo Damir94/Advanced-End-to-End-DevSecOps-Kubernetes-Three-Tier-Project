@@ -149,3 +149,46 @@ aws --version
 trivy --version
 eksctl --version
 ```
+
+Now, we have to configure Jenkins. So, copy the public IP of your Jenkins Server and paste it into your favourite browser on port 8080.
+<img width="833" height="779" alt="Screenshot 2026-01-30 at 10 57 33 AM" src="https://github.com/user-attachments/assets/36e715ea-1d79-4b33-afe5-79e01e6f58d3" />
+
+Click on Install suggested plugins
+<img width="835" height="389" alt="Screenshot 2026-01-30 at 10 58 25 AM" src="https://github.com/user-attachments/assets/85a662f2-9dba-4344-99b3-8db85911a033" />
+
+The plugins will be installed
+<img width="836" height="213" alt="Screenshot 2026-01-30 at 10 59 00 AM" src="https://github.com/user-attachments/assets/4910a655-e3cb-4e58-a27c-e05c693b2cb9" />
+
+After installing the plugins, continue as admin
+<img width="831" height="770" alt="Screenshot 2026-01-30 at 10 59 40 AM" src="https://github.com/user-attachments/assets/71931e51-7b21-4875-8a60-8dbe9e04dc50" />
+  - Click on Save and Finish
+  - Click on Start using Jenkins
+
+The Jenkins Dashboard will look like the snippet below
+<img width="1594" height="541" alt="Screenshot 2026-01-30 at 11 00 58 AM" src="https://github.com/user-attachments/assets/b0da7b80-71bd-4781-91a7-47c5534642e9" />
+
+### Step 5: We will deploy the EKS Cluster using the eksctl commands
+Now, go back to your Jenkins Server terminal and configure the AWS.
+```bash
+aws configure
+```
+  - Go to Manage Jenkins
+  - Click on Plugins
+<img width="1577" height="381" alt="Screenshot 2026-01-30 at 11 03 23 AM" src="https://github.com/user-attachments/assets/dd08a6cb-a656-47f5-af36-44a438ebc24f" />
+
+Select the Available plugins, install the following plugins and click on Install
+  - AWS Credentials
+  - Pipeline: AWS Steps
+<img width="1279" height="291" alt="Screenshot 2026-01-30 at 11 04 16 AM" src="https://github.com/user-attachments/assets/6419415c-b9fc-4210-8c04-92f630af3a05" />
+
+- Once both plugins are installed, restart your Jenkins service by checking the Restart Jenkins option.
+- Log in to your Jenkins Server Again
+
+#### Now, we have to set our AWS credentials on Jenkins
+- Go to Manage Plugins and click on Credentials
+<img width="1577" height="559" alt="Screenshot 2026-01-30 at 11 06 04 AM" src="https://github.com/user-attachments/assets/c7b1c7e4-6e05-499a-9f71-4680398699d8" />
+
+- Click on global.
+<img width="1357" height="270" alt="Screenshot 2026-01-30 at 11 06 34 AM" src="https://github.com/user-attachments/assets/815423dc-d74c-48e7-87f1-d6e627b6a0a6" />
+
+Select AWS Credentials as Kind and add the ID same as shown in the below snippet, except for your AWS Access Key & Secret Access key, and click on Create.
