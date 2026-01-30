@@ -161,11 +161,13 @@ eksctl --version
 <img width="836" height="213" alt="Screenshot 2026-01-30 at 10 59 00 AM" src="https://github.com/user-attachments/assets/4910a655-e3cb-4e58-a27c-e05c693b2cb9" />
 
 - After installing the plugins, continue as admin
+
 <img width="831" height="770" alt="Screenshot 2026-01-30 at 10 59 40 AM" src="https://github.com/user-attachments/assets/71931e51-7b21-4875-8a60-8dbe9e04dc50" />
   - Click on Save and Finish
   - Click on Start using Jenkins
 
 - The Jenkins Dashboard will look like the snippet below
+
 <img width="1594" height="541" alt="Screenshot 2026-01-30 at 11 00 58 AM" src="https://github.com/user-attachments/assets/b0da7b80-71bd-4781-91a7-47c5534642e9" />
 
 ### Step 5: We will deploy the EKS Cluster using the eksctl commands
