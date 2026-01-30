@@ -163,8 +163,9 @@ eksctl --version
 - After installing the plugins, continue as admin
 
 <img width="831" height="770" alt="Screenshot 2026-01-30 at 10 59 40 AM" src="https://github.com/user-attachments/assets/71931e51-7b21-4875-8a60-8dbe9e04dc50" />
-  - Click on Save and Finish
-  - Click on Start using Jenkins
+ 
+- Click on Save and Finish
+- Click on Start using Jenkins
 
 - The Jenkins Dashboard will look like the snippet below
 
