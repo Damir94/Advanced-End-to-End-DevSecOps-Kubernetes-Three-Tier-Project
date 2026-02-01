@@ -210,6 +210,157 @@ Once your cluster is created, you can validate whether your nodes are ready or n
 ```bash
 kubectl get nodes
 ```
+### Step 6: Now, we will configure the Load Balancer on our EKS because our application will have an ingress controller.
+- Download the policy for the LoadBalancer prerequisite.
+```bash
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json
+```
+- Create the IAM policy using the command below
+```bash
+aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+```
+- Create OIDC Provider
+```bash
+eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=Three-Tier-K8s-EKS-Cluster --approve
+```
+- Create a Service Account by using the below command and replace your account ID with your one
+```bash
+eksctl create iamserviceaccount --cluster=Three-Tier-K8s-EKS-Cluster --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your_account_id>:policy/AWSLoadBalancerControllerIAMPolicy --approve --region=us-east-1
+```
+- Run the below command to deploy the AWS Load Balancer Controller
+```bash
+sudo snap install helm --classic
+helm repo add eks https://aws.github.io/eks-charts
+helm repo update eks
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=my-cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+```
+- After 2 minutes, run the command below to check whether your pods are running or not.
+```bash
+kubectl get deployment -n kube-system aws-load-balancer-controller
+```
+- If the pods are getting Error or CrashLoopBackOff, then use the below command
+```bash
+helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
+  --set clusterName=<cluster-name> \
+  --set serviceAccount.create=false \
+  --set serviceAccount.name=aws-load-balancer-controller \
+  --set region=us-west-1 --set vpcId=<vpc#> -n kube-system
+```
+### Step 7: We need to create Amazon ECR Private Repositories for both Tiers (Frontend & Backend)
+- Click on Create repository
+- Select the Private option to provide the repository and click on Save.
+- Do the same for the backend repository and click on Save
+- Now, we have set up our ECR Private Repository and
+- Now, we need to configure ECR locally because we have to upload our images to Amazon ECR.
+- Copy the 1st command for login
+- Now, run the copied command on your Jenkins Server.
+
+### Step 8: Install & Configure ArgoCD
+- We will be deploying our application on a three-tier namespace. To do that, we will create a three-tier namespace on EKS
+```bash
+kubectl create namespace three-tier
+```
+- As you know, our two ECR repositories are private. So, when we try to push images to the ECR Repos, it will give us the error ImagePullError.
+- To get rid of this error, we will create a secret for our ECR Repo by the below command and then, we will add this secret to the deployment file.
+- Note: The Secrets are coming from the .docker/config.json file, which is created while logging the ECR in the earlier steps
+```bash
+kubectl create secret generic ecr-registry-secret \
+  --from-file=.dockerconfigjson=${HOME}/.docker/config.json \
+  --type=kubernetes.io/dockerconfigjson --namespace three-tier
+kubectl get secrets -n three-tier
+```
+- Now, we will install argoCD.
+- To do that, create a separate namespace for it and apply the argocd configuration for installation.
+```bash
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
+```
+- All pods must be running. To validate, run the command below
+```bash
+kubectl get pods -n argocd
+```
+- Now, expose the argoCD server as a LoadBalancer using the below command
+```bash
+kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+```
+- You can validate whether the Load Balancer is created or not by going to the AWS Console
+- To access the argoCD, copy the LoadBalancer DNS and hit it on your favourite browser.
+- You will get a warning like the snippet below.
+- Click on Advanced.
+- Click on the link below, which is appearing under Hide advanced
+- Now, we need to get the password for our argoCD server to perform the deployment.
+- To do that, we have a prerequisite, which is jq. Install it by the command below.
+```bash
+sudo apt install jq -y
+```
+```bash
+export ARGOCD_SERVER=$(kubectl get svc argocd-server -n argocd -o json | jq -r '.status.loadBalancer.ingress[0].hostname')
+export ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
+```
+- Enter the username and password in argoCD and click on SIGN IN.
+- Here is our ArgoCD Dashboard.
+
+### Step 9: Now, we have to configure SonarQube for our DevSecOps Pipeline
+- To do that, copy your Jenkins Server public IP and paste it into your favourite browser with a 9000 port
+- The username and password will be admin
+- Click on Log In.
+- Update the password
+- Click on Administration, then Security, and select Users
+- Click on Update tokens
+- Click on Generate
+- Copy the token, keep it somewhere safe and click on Done.
+- Now, we have to configure webhooks for quality checks.
+- Click on Administration, then Configuration, and select Webhooks
+- Click on Create
+- Provide the name of your project and in the URL, provide the Jenkins server public IP with port 8080, add sonarqube-webhook in the suffix, and click on Create.
+```bash
+http://<jenkins-server-public-ip>:8080/sonarqube-webhook/
+```
+- Here, you can see the webhook.
+- Now, we have to create a Project for the frontend code.
+- Click on Manually.
+- Provide the display name to your Project and click on Setup
+- Click on Locally.
+- Select the Use existing token and click on Continue.
+- Select Other and Linux as OS.
+- After performing the above steps, you will get the command, which you can see in the snippet below.
+- Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
+- Now, we have to create a Project for the backend code.
+- Click on Create Project.
+- Provide the name of your project and click on Set up.
+- Click on Locally.
+- Select the Use existing token and click on Continue.
+- Select Other and Linux as OS.
+- After performing the above steps, you will get the command, which you can see in the snippet below.
+- Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
+- Now, we have to create a Project for the backend code.
+- Click on Create Project.
+- Provide the name of your project and click on Set up.
+- Click on Locally.
+- Select the Use existing token and click on Continue.
+- Select Other and Linux as OS.
+- After performing the above steps, you will get the command, which you can see in the snippet below.
+- Now, use the command in the Jenkins Backend Pipeline where Code Quality Analysis will be performed.
+- Now, we have to store the sonar credentials.
+- Go to Dashboard -> Manage Jenkins -> Credentials
+- Select the kind as Secret text, paste your token in Secret and keep other things as it is.
+- Click on Create
+- Now, we have to store the GitHub Personal access token to push the deployment file, which will be modified in the pipeline itself for the ECR image.
+- Add GitHub credentials
+- Select the kind as Secret text and paste your GitHub Personal access token(not password) in Secret, and keep other things as it is.
+- Click on Create
+- Note: If you haven’t generated your token, you generate it first, then paste it into the Jenkins
+- Now, according to our Pipeline, we need to add an Account ID in the Jenkins credentials because of the ECR repo URI.
+- Select the kind as Secret text, paste your AWS Account ID in Secret and keep other things as it is.
+- Click on Create
+- Now, we need to provide our ECR image name for the frontend, which is frontend only.
+- Select the kind as Secret text, paste your frontend repo name in Secret and keep other things as it is.
+- Click on Create
+- Now, we need to provide our ECR image name for the backend, which is backend only.
+- Select the kind as Secret text, paste your backend repo name in Secret, and keep other things as it is.
+- Click on Create
+- Final Snippet of all Credentials that we needed to implement this project.
+
 
 
 
