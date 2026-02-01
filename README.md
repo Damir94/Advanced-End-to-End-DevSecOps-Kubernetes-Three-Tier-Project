@@ -196,3 +196,20 @@ Select the Available plugins, install the following plugins and click on Install
 <img width="1357" height="270" alt="Screenshot 2026-01-30 at 11 06 34 AM" src="https://github.com/user-attachments/assets/815423dc-d74c-48e7-87f1-d6e627b6a0a6" />
 
 - Select AWS Credentials as Kind and add the ID same as shown in the below snippet, except for your AWS Access Key & Secret Access key, and click on Create.
+- The Credentials will look like the snippet below.
+- Now, we need to add GitHub credentials as well because currently, my repository is Private.
+- This thing, I am performing this because in Industry Projects, your repository will be private.
+- So, add the username and personal access token of your GitHub account.
+- Both credentials will look like this.
+- Create an eks cluster using the commands below.
+```bash
+eksctl create cluster --name Three-Tier-K8s-EKS-Cluster --region us-east-1 --node-type t2.medium --nodes-min 2 --nodes-max 2
+aws eks update-kubeconfig --region us-east-1 --name Three-Tier-K8s-EKS-Cluster
+```
+Once your cluster is created, you can validate whether your nodes are ready or not by using the following command
+```bash
+kubectl get nodes
+```
+
+
+
