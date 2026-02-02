@@ -361,6 +361,65 @@ http://<jenkins-server-public-ip>:8080/sonarqube-webhook/
 - Click on Create
 - Final Snippet of all Credentials that we needed to implement this project.
 
+### Step 10: Install the required plugins and configure the plugins to deploy our Three-Tier Application
+- Install the following plugins by going to Dashboard -> Manage Jenkins -> Plugins -> Available Plugins
+```bash
+Docker
+Docker Commons
+Docker Pipeline
+Docker API
+docker-build-step
+Eclipse Temurin installer
+NodeJS
+OWASP Dependency-Check
+SonarQube Scanner
+```
+- Now, we have to configure the installed plugins.
+- Go to Dashboard -> Manage Jenkins -> Tools
+- We are configuring JDK
+- Search for JDK and provide the configuration like the snippet below.
+- Now, we will configure the SonarQube scanner
+- Search for the SonarQube scanner and provide the configuration like the snippet below.
+- Now, we will configure nodejs
+- Search for the node and provide the configuration, like the snippet below.
+- Now, we will configure the OWASP Dependency Check
+- Search for Dependency-Check and provide the configuration like the snippet below.
+- Now, we will configure the Docker
+- Search for Docker and provide the configuration like the snippet below.
+- Now, we have to set the path for SonarQube in Jenkins
+- Go to Dashboard -> Manage Jenkins -> System
+- Search for SonarQube installations
+- Provide the name as it is, then in the Server URL, copy the SonarQube public IP (same as Jenkins) with port 9000, select the Sonar token that we have added recently, and click on Apply & Save.
+- Now, we are ready to create our Jenkins Pipeline to deploy our Backend Code.
+- Go to Jenkins Dashboard
+- Click on New Item
+- Provide the name of your Pipeline and click on OK.
+- This is the Jenkins file to deploy the Backend Code on EKS.
+- Copy and paste it into the Jenkins
+```bash
+https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project/blob/master/Jenkins-Pipeline-Code/Jenkinsfile-Backend
+```
+- Click Apply & Save.
+- Now, click on the build.
+- Our pipeline was successful after addressing a few common mistakes.
+- Note: Do the changes in the Pipeline according to your project.
+- Now, we are ready to create our Jenkins Pipeline to deploy our Frontend Code.
+- Go to Jenkins Dashboard
+- Click on New Item
+- Provide the name of your Pipeline and click on OK.
+- This is the Jenkins file to deploy the Frontend Code on EKS.
+- Copy and paste it into the Jenkins
+```bash
+https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project/blob/master/Jenkins-Pipeline-Code/Jenkinsfile-Frontend
+```
+- Click Apply & Save.
+- Now, click on the build.
+- Our pipeline was successful after a few common mistakes.
+- Note: Do the changes in the Pipeline according to your project.
+- 
+
+
+
 
 
 
