@@ -416,10 +416,123 @@ https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-
 - Now, click on the build.
 - Our pipeline was successful after a few common mistakes.
 - Note: Do the changes in the Pipeline according to your project.
-- 
 
+### Setup 11: We will set up the Monitoring for our EKS Cluster. We can monitor the Cluster Specifications and other necessary things.
+- We will achieve the monitoring using Helm
+- Add the Prometheus repo by using the command below
+```bash
+helm repo add stable https://charts.helm.sh/stable
+```
+- Install the Prometheus
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/prometheus
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install grafana grafana/grafana
+```
+- Now, check the service by the command below
+```bash
+kubectl get svc
+```
+- Now, we need to access our Prometheus and Grafana consoles from outside of the cluster.
+- For that, we need to change the Service type from ClusterType to LoadBalancer
+- Edit the stable-kube-prometheus-sta-prometheus service
+```bash
+kubectl edit svc stable-kube-prometheus-sta-prometheus
+```
+- Modification in the 48th line from ClusterType to LoadBalancer
+- Edit the stable-grafana service
+```bash
+kubectl edit svc stable-grafana
+```
+- Modification in the 39th line from ClusterType to LoadBalancer
+- Now, if you list the service again, then you will see the LoadBalancers' DNS names
+```bash
+kubectl get svc
+```
+- You can also validate from your console.
+- Now, access your Prometheus Dashboard
+- Paste the <Prometheus-LB-DNS>:9090 in your favourite browser, and you will see it like this
+- Click on Status and select Target.
+- You will see a lot of Targets
+- Now, access your Grafana Dashboard
+- Copy the ALB DNS of Grafana and paste it into your favourite browser.
+- The username will be admin, and the password will be prom-operator for your Grafana LogIn.
+- Now, click on Data Source
+- Select Prometheus
+- In the Connection, paste your <Prometheus-LB-DNS>:9090.
+- If the URL is correct, then you will see a green notification/
+- Click on Save & test.
+- Now, we will create a dashboard to visualise our Kubernetes Cluster Logs.
+- Click on Dashboard.
+- Once you click on Dashboard. You will see a lot of Kubernetes components being monitored.
+- Let’s try to import a type of Kubernetes Dashboard.
+- Click on New and select Import
+- Provide 6417 ID and click on Load
+- Note: 6417 is a unique ID from Grafana, which is used to monitor and visualise Kubernetes Data
+- Select the data source that you have created earlier and click on Import.
+- Here, you go.
+- You can view your Kubernetes Cluster Data.
+- Feel free to explore the other details of the Kubernetes Cluster.
 
+### Step 12: We will deploy our Three-Tier Application using ArgoCD.
+- As our repository is private. So, we need to configure the Private Repository in ArgoCD.
+- Click on Settings and select Repositories
+- Click on CONNECT REPO USING HTTPS
+- Now, provide the repository name where your Manifest files are present.
+- Provide the username and GitHub Personal Access token and click on CONNECT.
+- If your Connection Status is Successful, it means the repository connected successfully.
+- Now, we will create our first application, which will be a database.
+- Click on CREATE APPLICATION.
+- Provide the details as it is provided in the snippet below and scroll down.
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+- Click on CREATE.
+- While your database Application is starting to deploy, we will create an application for the backend.
+- Provide the details as it is provided in the snippet below and scroll down.
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+- Click on CREATE.
+- While your backend Application is starting to deploy, we will create an application for the frontend.
+- Provide the details as it is provided in the snippet below and scroll down.
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+- Click on CREATE.
+- While your frontend Application is starting to deploy, we will create an application for the ingress.
+- Provide the details as it is provided in the snippet below and scroll down.
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+- Click on CREATE.
+- Once your Ingress application is deployed. It will create an Application Load Balancer
+- You can check out the load balancer named k8s-three.
+- Now, copy the ALB-DNS and go to your Domain Provider. In my case, Porkbun is the domain provider.
+- Go to DNS and add a CNAME type with hostname backend, then add your ALB in the Answer and click on Save
+- Note: I have created a subdomain backend.amanpathakdevops.study
+- You can see all 4 application deployments in the snippet below.
+- Now, hit your subdomain after 2 to 3 minutes in your browser to see the magic.
+- You can play with the application by adding the records.
+- You can play with the application by deleting the records.
+- Now, you can see your Grafana Dashboard to view the EKS data, such as pods, namespace, deployments, etc.
+- If you want to monitor the three-tier namespace.
+- In the namespace, replace three-tier with another namespace.
+- You will see the deployments that are done by ArgoCD
+- This is the Ingress Application Deployment in ArgoCD
+- This is the Frontend Application Deployment in ArgoCD
+- This is the Backend Application Deployment in ArgoCD
+- This is the Database Application Deployment in ArgoCD
+- If you observe, we have configured the Persistent Volume & Persistent Volume Claim. So, if the pods get deleted, then the data won’t be lost. The Data will be stored on the host machine.
+- To validate it, delete both Database pods.
+- Now, the new pods will be started.
+- And Your Application won’t lose a single piece of data.
 
-
-
+### Conclusion
+- In this comprehensive DevSecOps Kubernetes project, we successfully:
+  - Established IAM user and Terraform for AWS setup.
+  - Deployed Jenkins on AWS, configured tools, and integrated it with SonarQube.
+  - Set up an EKS cluster, configured a Load Balancer, and established private ECR repositories.
+  - Implemented monitoring with Helm, Prometheus, and Grafana.
+  - Installed and configured ArgoCD for GitOps practices.
+  - Created Jenkins pipelines for CI/CD, deploying a Three-Tier application.
+  - Ensured data persistence with persistent volumes and claims.
 
