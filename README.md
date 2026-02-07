@@ -357,21 +357,8 @@ Step 3: Verify installation
 helm version
 ```
 
-### Step 4: Configure the Jenkins
-- Now, we logged into our Jenkins server.
-
-- We have installed some services such as Jenkins, Docker, Sonarqube, Terraform, Kubectl, AWS CLI, and Trivy.
-- Let’s validate whether all our installed or not.
-```bash
-jenkins --version
-docker --version
-docker ps
-terraform --version
-kubectl version
-aws --version
-trivy --version
-eksctl --version
-```
+### Step 3: Configure the Jenkins
+- We logged into our Jenkins server.
 
 - Now, we have to configure Jenkins. So, copy the public IP of your Jenkins Server and paste it into your favourite browser on port 8080.
 <img width="833" height="779" alt="Screenshot 2026-01-30 at 10 57 33 AM" src="https://github.com/user-attachments/assets/36e715ea-1d79-4b33-afe5-79e01e6f58d3" />
