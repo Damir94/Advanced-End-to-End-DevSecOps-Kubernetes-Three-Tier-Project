@@ -72,24 +72,129 @@ Create a new IAM User on AWS and give it AdministratorAccess for testing purpose
 
 - Here, you will see that you got the credentials, and you can also download the CSV file for the future.
 
-## Step 2: We will install Terraform & AWS CLI to deploy our Jenkins Server(EC2) on AWS.
-- Install & Configure Terraform and AWS CLI on your local machine to create a Jenkins Server on AWS Cloud
+## Step 2: We will create our Jenkins Server(EC2) on AWS.
+1. Log in to AWS
+  - Go to AWS Management Console
+  - Search for EC2
+  - Click EC2 → Instances → Launch instance
 
-### Terraform Installation Script
+2. Name your instance
+  - Example: Jenkins-server
+
+3. Choose an AMI (OS)
+  - Pick an operating system: Ubuntu Server 22.04
+
+4. Choose Instance Type
+  - Select t2.2xlarge
+
+5. Create or Select a Key Pair
+  - This is required to SSH into EC2.
+  - Click Create new key pair
+  - Name it (example: ec2-key)
+  - Download the .pem file
+  - Save it safely — you can’t download it again.
+
+6. Network Settings (Important)
+  - Click Edit under Network settings:
+  - VPC: Default
+  - Subnet: Any
+  - Auto-assign public IP: Enable
+  - Security Group:
+      - Allow SSH (22) → Source: My IP
+      - Allow HTTP (80) if you want a web server
+      - Allow HTTP (8080) port for Jenkins server
+      - Alow HTTP (9090) port Sonarqube
+7. Storage
+  - Make it 30GB
+
+8. We will install some services such as Jenkins, Docker, Sonarqube, Terraform, Kubectl, AWS CLI, and Trivy through User data.
+  - Just copy and paste below tools-install code in the User data.
 ```bash
-wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg - dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
-echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+#!/bin/bash
+# For Ubuntu 22.04
+# Intsalling Java
+sudo apt update -y
+sudo apt install openjdk-17-jre -y
+sudo apt install openjdk-17-jdk -y
+java --version
+
+# Installing Jenkins
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update -y
+sudo apt-get install jenkins -y
+
+# Installing Docker 
+#!/bin/bash
 sudo apt update
-sudo apt install terraform -y
-```
-### AWSCLI Installation Script
-```bash
+sudo apt install docker.io -y
+sudo usermod -aG docker jenkins
+sudo usermod -aG docker ubuntu
+sudo systemctl restart docker
+sudo chmod 777 /var/run/docker.sock
+
+# If you don't want to install Jenkins, you can create a container of Jenkins
+# docker run -d -p 8080:8080 -p 50000:50000 --name jenkins-container jenkins/jenkins:lts
+
+# Run Docker Container of Sonarqube
+#!/bin/bash
+docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
+
+
+# Installing AWS CLI
+#!/bin/bash
 curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
 sudo apt install unzip -y
 unzip awscliv2.zip
 sudo ./aws/install
+
+# Installing Kubectl
+#!/bin/bash
+sudo apt update
+sudo apt install curl -y
+sudo curl -LO "https://dl.k8s.io/release/v1.28.4/bin/linux/amd64/kubectl"
+sudo chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+
+
+# Installing eksctl
+#! /bin/bash
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+
+# Installing Terraform
+#!/bin/bash
+wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+sudo apt update
+sudo apt install terraform -y
+
+# Installing Trivy
+#!/bin/bash
+sudo apt-get install wget apt-transport-https gnupg lsb-release -y
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list
+sudo apt update
+sudo apt install trivy -y
+
+
+# Intalling Helm
+#! /bin/bash
+sudo snap install helm --classic
 ```
-- Now, configure both the tools
+9. Launch Instance 
+  - Click Launch instance
+  - Your EC2 will be running in ~30–60 seconds.
+
+
+
+
+
 
 ### Configure Terraform
 - Edit the file /etc/environment using the below command, add the highlighted lines and add your keys in the blur space.
