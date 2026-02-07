@@ -116,51 +116,6 @@ Create a new IAM User on AWS and give it AdministratorAccess for testing purpose
 
 
 
-
-### Configure Terraform
-- Edit the file /etc/environment using the below command, add the highlighted lines and add your keys in the blur space.
-```bash
-sudo vim /etc/environment
-```
-- After making the changes, restart your machine to reflect the changes to your environment variables.
-
-### Configure AWS CLI
-- Run the below command, and add your keys
-```bash
-aws configure
-```
-
-### Step 3: Deploy the Jenkins Server(EC2) using Terraform
-- Clone the Git repository
-```bash
-https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project
-```
-- Navigate to the Jenkins-Server-TF
-
-- Do some modifications to the backend.tf file, such as changing the bucket name and dynamodb table(make sure you have created both manually on AWS Cloud).
-
-- Now, you have to replace the PEM file name as you have some other name for your PEM file. To provide the PEM file name that is already created on AWS
-
-- Initialise the backend by running the command below
-```bash
-terraform init
-```
-- Run the command below to check the syntax error
-```bash
-terraform validate
-```
-- Run the below command to get the blueprint of what kind of AWS services will be created.
-```bash
-terraform plan -var-file=variables.tfvars
-```
-- Now, run the below command to create the infrastructure on AWS Cloud, which will take 3 to 4 minutes maximum
-```bash
-terraform apply -var-file=variables.tfvars --auto-approve
-```
-- Now, connect to your Jenkins server by clicking on Connect.
-
-- Copy the SSH command and paste it on your local machine.
-
 ### Step 4: Configure the Jenkins
 - Now, we logged into our Jenkins server.
 
