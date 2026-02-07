@@ -127,7 +127,6 @@ Create a new IAM User on AWS and give it AdministratorAccess for testing purpose
 
 <img width="1540" height="355" alt="Screenshot 2026-02-07 at 12 56 46 PM" src="https://github.com/user-attachments/assets/1d963bee-c921-4f6e-9250-e7347eb1378d" />
 
-
 ### Attach Role to EC2 Instance
   - Go to EC2 → Instances
   - Select your instance
@@ -135,6 +134,45 @@ Create a new IAM User on AWS and give it AdministratorAccess for testing purpose
   - Choose EC2-Admin-Role
   - Save
 Your EC2 instance now has full admin access to AWS
+
+### Jenkins Installation Guide (Ubuntu)
+Step 1: Update your system
+```bash
+sudo apt update && sudo apt upgrade -y
+```
+Step 2: Install Java (Jenkins needs Java)
+Jenkins works best with OpenJDK 17 now.
+```bash
+sudo apt install openjdk-17-jdk -y
+```
+Verify
+```bash
+java -version
+```
+Step 3: Add Jenkins official repository & key
+```bash
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+```
+```bash
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+```
+Step 4: Install Jenkins
+```bash
+sudo apt update
+sudo apt install jenkins -y
+```
+Step 5: Start & enable Jenkins
+```bash
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+```
+Check status:
+```bash
+sudo systemctl status jenkins
+```
 
 ### Docker Installation Guide (Ubuntu)
 
@@ -181,6 +219,54 @@ Step 7: Run Docker Without sudo (Optional but Recommended)
 sudo usermod -aG docker ubuntu
 ```
 Important: Log out and log back in for the group changes to take effect. After re-login, you should be able to run Docker commands without sudo.
+
+# Run Docker Container of Sonarqube
+```bash
+docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
+```
+
+### aws cli is installed
+Step 1: Update your system
+```bash
+sudp apt update
+```
+Step 2: Download AWS CLI
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+```
+Step 3: Unzip the installer
+```bash
+unzip awscliv2.zip
+```
+Step 4: Install AWS CLI
+```bash
+sudo ./aws/install
+```
+Step 5: Verify Installation
+```bash
+aws --version
+```
+### eksctl is installed: eksctl version
+Step 1: Install
+```bash
+sudo apt update && sudo apt install -y curl
+```
+Step 2: Download the latest eksctl binary
+```bash
+curl -sLO https://github.com/eksctl-io/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz
+```
+Step 3: Extract the binary
+```bash
+tar -xzf eksctl_Linux_amd64.tar.gz
+```
+Step 4: Move it to a system path
+```bash
+sudo mv eksctl /usr/local/bin
+```
+Step 5: Verify installation
+```bash
+eksctl version
+```
 
 ### Kubernetes CLI (kubectl) Installation
 Step 1: Download kubectl Binary and Checksum
@@ -229,7 +315,47 @@ Verify Terraform installation:
 terraform --version
 ```
 
+### Install Trivy using official repo
+Step 1: Update system
+```bash
+sudo apt update
+```
+Step 2: Install required packages
+```bash
+sudo apt install -y wget apt-transport-https gnupg lsb-release
+```
+Step 3: Add Trivy GPG key
+```bash
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+```
+Step 4: Add Trivy repository
+```bash
+echo deb https://aquasecurity.github.io/trivy-repo/deb \
+$(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/trivy.list
+```
+Step 5: Install Trivy
+```bash
+sudo apt update
+sudo apt install -y trivy
+```
+Step 6: Verify installation
+```bash
+trivy --version
+```
 
+### helm is installed
+Step 1: Update system
+```bash
+sudo apt update
+```
+Step 2: Download and install Helm
+```bash
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+```
+Step 3: Verify installation
+```bash
+helm version
+```
 
 ### Step 4: Configure the Jenkins
 - Now, we logged into our Jenkins server.
