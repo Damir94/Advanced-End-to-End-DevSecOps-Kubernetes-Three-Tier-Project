@@ -220,12 +220,12 @@ sudo usermod -aG docker ubuntu
 ```
 Important: Log out and log back in for the group changes to take effect. After re-login, you should be able to run Docker commands without sudo.
 
-# Run Docker Container of Sonarqube
+## Run Docker Container of Sonarqube
 ```bash
 docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
 ```
 
-### aws cli is installed
+### AWS CLI is installed
 Step 1: Update your system
 ```bash
 sudp apt update
