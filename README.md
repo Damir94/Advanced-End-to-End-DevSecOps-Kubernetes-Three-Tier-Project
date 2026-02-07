@@ -113,8 +113,28 @@ Create a new IAM User on AWS and give it AdministratorAccess for testing purpose
 
 <img width="1555" height="257" alt="Screenshot 2026-02-07 at 12 23 28 PM" src="https://github.com/user-attachments/assets/c550c483-b895-4c04-92fb-b1dec90fe37a" />
 
+### Create an IAM Role
+  - Go to IAM → Roles → Create role
+  - Trusted entity:
+      - Select AWS service
+      - Choose EC2
+  - Click Next
+  - Attach Admin Access
+      - Search and select: AdministratorAccess
+  - Click Next 
+  - Name the Role
+  - Create the role
+
+<img width="1540" height="355" alt="Screenshot 2026-02-07 at 12 56 46 PM" src="https://github.com/user-attachments/assets/1d963bee-c921-4f6e-9250-e7347eb1378d" />
 
 
+### Attach Role to EC2 Instance
+  - Go to EC2 → Instances
+  - Select your instance
+  - Actions → Security → Modify IAM role
+  - Choose EC2-Admin-Role
+  - Save
+Your EC2 instance now has full admin access to AWS
 
 ### Step 4: Configure the Jenkins
 - Now, we logged into our Jenkins server.
