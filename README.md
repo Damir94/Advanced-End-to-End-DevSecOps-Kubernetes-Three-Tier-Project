@@ -213,6 +213,7 @@ sudo systemctl start docker
 sudo systemctl status docker
 sudo docker run hello-world
 ```
+<img width="1032" height="278" alt="image" src="https://github.com/user-attachments/assets/a27be5d0-3098-4449-8542-700dbfec428f" />
 
 Step 7: Run Docker Without sudo (Optional but Recommended)
 ```bash
@@ -314,6 +315,7 @@ Verify Terraform installation:
 ```bash
 terraform --version
 ```
+<img width="525" height="96" alt="image" src="https://github.com/user-attachments/assets/ad84684d-6a60-43e6-90ac-bdbbdc7fe069" />
 
 ### Install Trivy using official repo
 Step 1: Update system
