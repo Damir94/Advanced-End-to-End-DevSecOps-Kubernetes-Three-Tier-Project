@@ -557,7 +557,83 @@ Step 5: Run the Pipeline
       - Terraform init
       - Terraform plan
       - Terraform apply
+### A jump server (or bastion host)
+You need a jump server to reach an EKS cluster in a private VPC because private subnets and private endpoints are not accessible from the public internet, and the jump server acts as a secure gateway to connect to your cluster.
 
+### Why EKS clusters may need a jump server
+  - When you create an EKS cluster inside a VPC, you usually put the worker nodes (EC2 instances) or private API endpoints in private subnets for security.
+  - Private subnets: Not directly accessible from the internet.
+  - EKS API endpoint: Can be private (accessible only inside the VPC) or public (accessible over the internet).
+  - If the EKS API endpoint is private, you cannot reach it from your laptop or home network directly.
+
+### This is where the jump server comes in:
+  - You SSH into the jump server (which is publicly accessible).
+  - From there, you can access the private EKS API endpoint or worker nodes.
+  - It’s essentially your “doorway” into the private network.
+
+1. Log in to AWS
+  - Go to AWS Management Console
+  - Search for EC2
+  - Click EC2 → Instances → Launch instance
+
+2. Name your instance
+  - Example: Jump-server
+
+3. Choose an AMI (OS)
+  - Pick an operating system: Ubuntu Server 22.04
+
+4. Choose Instance Type
+  - Select t2.medium
+
+5. Create or Select a Key Pair
+  - This is required to SSH into EC2.
+  - Click Create new key pair
+  - Name it (example: ec2-key)
+  - Download the .pem file
+  - Save it safely — you can’t download it again.
+
+6. Network Settings (Important)
+  - Click Edit under Network settings:
+  - VPC: Choose EKS cluster VPC
+  - Subnet: Any public subnet from EKS cluster VPC
+  - Auto-assign public IP: Enable
+  - Security Group: None
+      
+7. Storage
+  - Make it 30G
+
+8. Add adminstrator access to the jump server through IAM role in the IAM instance profile
+
+9. Launch Instance 
+  - Click Launch instance
+  - Your EC2 will be running in ~30–60 seconds.
+10. We need to install AWS CLI, kubectl, helm on the jump server
+#### Installing AWS CLI
+```bash
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install unzip -y
+unzip awscliv2.zip
+sudo ./aws/install
+```
+#### Installing Kubectl
+```bash
+sudo apt update
+sudo apt install curl -y
+sudo curl -LO "https://dl.k8s.io/release/v1.28.4/bin/linux/amd64/kubectl"
+sudo chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+```
+#### Installing Helm
+```bash
+sudo snap install helm --classic
+```
+####  Installing eksctl
+```bash
+curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /tmp
+sudo mv /tmp/eksctl /usr/local/bin
+eksctl version
+```
 
 - Create an eks cluster using the commands below.
 ```bash
