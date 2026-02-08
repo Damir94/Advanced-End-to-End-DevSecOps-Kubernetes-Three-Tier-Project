@@ -407,11 +407,154 @@ Select the Available plugins, install the following plugins and click on Install
 <img width="1357" height="270" alt="Screenshot 2026-01-30 at 11 06 34 AM" src="https://github.com/user-attachments/assets/815423dc-d74c-48e7-87f1-d6e627b6a0a6" />
 
 - Select AWS Credentials as Kind and add the ID same as shown in the below snippet, except for your AWS Access Key & Secret Access key, and click on Create.
+<img width="720" height="342" alt="image" src="https://github.com/user-attachments/assets/1abca0c0-b2d1-43a3-a342-9710d2d3bad5" />
+
 - The Credentials will look like the snippet below.
+<img width="1600" height="288" alt="image" src="https://github.com/user-attachments/assets/e7bed2eb-323b-4d8e-92d9-76599fbf27c7" />
+
 - Now, we need to add GitHub credentials as well because currently, my repository is Private.
 - This thing, I am performing this because in Industry Projects, your repository will be private.
 - So, add the username and personal access token of your GitHub account.
+<img width="1600" height="680" alt="image" src="https://github.com/user-attachments/assets/cff93a30-ac62-428f-8d1e-73341ea41bcf" />
+
 - Both credentials will look like this.
+<img width="720" height="149" alt="image" src="https://github.com/user-attachments/assets/c891e209-4329-46f7-ac91-5023f1e62b5f" />
+
+### Install Terraform Plugin via Jenkins UI
+Step 1: Open Jenkins Dashboard
+```nginx
+Manage Jenkins → Manage Plugins
+```
+Step 2: Install Plugin
+  - Go to Available plugins
+  - Search: Terraform
+  - Install: Terraform Plugin (by HashiCorp)
+  - Check “Restart Jenkins after install”
+
+Step 3: Configure Terraform Installation
+After restart:
+```nginx
+Manage Jenkins → Global Tool Configuration
+```
+
+Step 4: Use system-installed Terraform
+  - If Terraform is already installed on the server:
+  - Uncheck Install automatically
+  - Set path:
+```bash
+/usr/bin/terraform
+```
+
+### We will deploy our EKS Cluster with help of Jenkins file 
+Big Picture (what we’re building)
+```csharp
+GitHub Repo (Terraform EKS code)
+        ↓
+Jenkins Pipeline Job
+        ↓
+Terraform init → plan → apply
+        ↓
+AWS EKS Cluster Created
+```
+
+Step 1: Jenkinsfile (Pipeline Code)
+  - Create a file named Jenkinsfile in your repo:
+```groovy
+properties([
+    parameters([
+        string(
+            defaultValue: 'dev',
+            name: 'Environment'
+        ),
+        choice(
+            choices: ['plan', 'apply', 'destroy'], 
+            name: 'Terraform_Action'
+        )])
+])
+pipeline {
+    agent any
+    stages {
+        stage('Preparing') {
+            steps {
+                sh 'echo Preparing'
+            }
+        }
+        stage('Git Pulling') {
+            steps {
+                git branch: 'master', url: 'https://github.com/AmanPathak-DevOps/EKS-Terraform-GitHub-Actions.git'
+            }
+        }
+        stage('Init') {
+            steps {
+                withAWS(credentials: 'aws-creds', region: 'us-east-1') {
+                sh 'terraform -chdir=eks/ init'
+                }
+            }
+        }
+        stage('Validate') {
+            steps {
+                withAWS(credentials: 'aws-creds', region: 'us-east-1') {
+                sh 'terraform -chdir=eks/ validate'
+                }
+            }
+        }
+        stage('Action') {
+            steps {
+                withAWS(credentials: 'aws-creds', region: 'us-east-1') {
+                    script {    
+                        if (params.Terraform_Action == 'plan') {
+                            sh "terraform -chdir=eks/ plan -var-file=${params.Environment}.tfvars"
+                        }   else if (params.Terraform_Action == 'apply') {
+                            sh "terraform -chdir=eks/ apply -var-file=${params.Environment}.tfvars -auto-approve"
+                        }   else if (params.Terraform_Action == 'destroy') {
+                            sh "terraform -chdir=eks/ destroy -var-file=${params.Environment}.tfvars -auto-approve"
+                        } else {
+                            error "Invalid value for Terraform_Action: ${params.Terraform_Action}"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+```
+
+Step 2: Prepare Your GitHub Repo
+Your repo should look something like this:
+```css
+eks-terraform/
+├── main.tf
+├── variables.tf
+├── outputs.tf
+├── provider.tf
+├── vpc.tf
+├── eks.tf
+└── Jenkinsfile
+```
+Step 3: Create Jenkins Pipeline Job
+  - Jenkins Dashboard → New Item
+  - Name: deploy-eks-cluster
+  - Select: Pipeline
+  - Click OK
+
+Step 4: Configure Pipeline Job
+  - Under Pipeline section:
+  - Definition: Pipeline script from SCM
+  - SCM: Git
+  - Repository URL: Your GitHub repo URL
+  - Branch: */main
+  - Script Path: Jenkinsfile
+  - Save
+
+Step 5: Run the Pipeline
+  - Open the job → Build Now
+  - Watch Console Output
+  - You should see:
+      - Terraform init
+      - Terraform plan
+      - Terraform apply
+
+
 - Create an eks cluster using the commands below.
 ```bash
 eksctl create cluster --name Three-Tier-K8s-EKS-Cluster --region us-east-1 --node-type t2.medium --nodes-min 2 --nodes-max 2
