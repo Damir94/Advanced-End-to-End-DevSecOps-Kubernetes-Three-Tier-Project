@@ -135,6 +135,9 @@ Create a new IAM User on AWS and give it AdministratorAccess for testing purpose
   - Save
 Your EC2 instance now has full admin access to AWS
 
+<img width="503" height="235" alt="Screenshot 2026-02-08 at 1 21 10 PM" src="https://github.com/user-attachments/assets/703dc76c-2845-4598-b14b-1137ef52469b" />
+
+
 ### Jenkins Installation Guide (Ubuntu)
 Step 1: Update your system
 ```bash
@@ -149,6 +152,8 @@ Verify
 ```bash
 java -version
 ```
+<img width="915" height="140" alt="Screenshot 2026-02-08 at 1 23 46 PM" src="https://github.com/user-attachments/assets/53d0be19-9cb4-4a7e-84b4-1171bbcd9875" />
+
 Step 3: Add Jenkins official repository & key
 ```bash
 curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
