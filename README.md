@@ -634,6 +634,23 @@ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/d
 sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
 ```
+### Verify your jump server can reach the EKS cluster
+Step 1: Provide  aws credentials and run this on jump server:
+```bash
+aws configure
+```
+You’ll be asked for:
+  - AWS Access Key ID
+  - AWS Secret Access Key
+  - Default region (e.g., us-east-1)
+  - Default output format (optional, e.g., json)
+Step 2: After configuring, you can run:
+```bash
+aws eks --region <region> update-kubeconfig --name <cluster-name>
+kubectl get nodes
+```
+Security note: Don’t leave long-lived access keys on a jump server if multiple people have access. Using an instance IAM role is safer.
+
 
 - Create an eks cluster using the commands below.
 ```bash
