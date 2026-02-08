@@ -522,14 +522,14 @@ pipeline {
 Step 2: Prepare Your GitHub Repo
 Your repo should look something like this:
 ```css
-eks-terraform/
+eks/
 ├── main.tf
 ├── variables.tf
 ├── outputs.tf
 ├── provider.tf
 ├── vpc.tf
 ├── eks.tf
-└── Jenkinsfile
+Jenkinsfile
 ```
 Step 3: Create Jenkins Pipeline Job
   - Jenkins Dashboard → New Item
