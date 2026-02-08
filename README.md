@@ -156,11 +156,11 @@ java -version
 
 Step 3: Add Jenkins official repository & key
 ```bash
-curl -fsSL https://pkg.jenkins.io/debian/jenkins.io-2023.key | sudo tee \
-/usr/share/keyrings/jenkins-keyring.asc > /dev/null
-echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
-https://pkg.jenkins.io/debian binary/ | sudo tee \
-/etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo wget -O /etc/apt/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2026.key
+echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
 ```
 Step 4: Install Jenkins
 ```bash
@@ -176,6 +176,7 @@ Check status:
 ```bash
 sudo systemctl status jenkins
 ```
+<img width="1211" height="219" alt="Screenshot 2026-02-08 at 2 04 06 PM" src="https://github.com/user-attachments/assets/b3335cc5-1a8b-4294-827e-26fa4a67541b" />
 
 ### Docker Installation Guide (Ubuntu)
 
