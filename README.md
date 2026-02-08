@@ -5,11 +5,6 @@
 ## Project Introduction:
 Welcome to the End-to-End DevSecOps Kubernetes Project guide! In this comprehensive project, we will walk through the process of setting up a robust Three-Tier architecture on AWS using Kubernetes, DevOps best practices, and security measures. This project aims to provide hands-on experience in deploying, securing, and monitoring a scalable application environment.
 
-### Before we dive into these amazing projects, here is github link where you can use Terraform to provision a Production EKS Cluster.
-```bash
-https://github.com/Damir94/Production-Ready-EKS-Clusters-with-Terraform-and-GitHub-Actions
-```
-
 ## Project Overview:
 In this project, we will cover the following key aspects:
 
@@ -652,16 +647,8 @@ kubectl get nodes
 Security note: Don’t leave long-lived access keys on a jump server if multiple people have access. Using an instance IAM role is safer.
 
 
-- Create an eks cluster using the commands below.
-```bash
-eksctl create cluster --name Three-Tier-K8s-EKS-Cluster --region us-east-1 --node-type t2.medium --nodes-min 2 --nodes-max 2
-aws eks update-kubeconfig --region us-east-1 --name Three-Tier-K8s-EKS-Cluster
-```
-Once your cluster is created, you can validate whether your nodes are ready or not by using the following command
-```bash
-kubectl get nodes
-```
-### Step 6: Now, we will configure the Load Balancer on our EKS because our application will have an ingress controller.
+
+### Now, we will configure the Load Balancer on our EKS because our application will have an ingress controller.
 - Download the policy for the LoadBalancer prerequisite.
 ```bash
 curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json
