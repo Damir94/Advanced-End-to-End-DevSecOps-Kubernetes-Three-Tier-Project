@@ -646,44 +646,140 @@ kubectl get nodes
 ```
 Security note: Don’t leave long-lived access keys on a jump server if multiple people have access. Using an instance IAM role is safer.
 
+### Installing AWS ALB Ingress Controller on EKS
+This guide explains how to install the AWS ALB (AWS Load Balancer) Ingress Controller on an EKS cluster, along with the required IAM setup.
 
+Step 1: Set the cluster name:
+```bash
+export cluster_name=demo-cluster
+```
+Step 2: Setup OIDC Connector
+```bash
+oidc_id=$(aws eks describe-cluster --name $cluster_name --query "cluster.identity.oidc.issuer" --output text | cut -d '/' -f 5)
+```
+Step 3: Check if OIDC provider already exists
+```bash
+aws iam list-open-id-connect-providers | grep $oidc_id | cut -d "/" -f4
+```
+Step 4: If OIDC is NOT configured, run this
+```bash
+eksctl utils associate-iam-oidc-provider --cluster $cluster_name --approve
+```
+Step 5: Download IAM Policy for ALB Controller
+```bash
+curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.11.0/docs/install/iam_policy.json
+```
+Step 6: Create the IAM Policy in AWS
+```bash
+aws iam create-policy \
+    --policy-name AWSLoadBalancerControllerIAMPolicy \
+    --policy-document file://iam_policy.json
+```
+Step 7: Create IAM Role + Kubernetes Service Account
+```bash
+eksctl create iamserviceaccount \
+  --cluster=<your-cluster-name> \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+--attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve --region=us-east-1 --override-existing-serviceaccounts
+```
+Step 8: Verify Service Account is create by running:
+```bash
+kubectl get sa -n kube-system
+```
+If there is no Service Account created, go to the AWS CloudFormation and delete service account
 
-### Now, we will configure the Load Balancer on our EKS because our application will have an ingress controller.
-- Download the policy for the LoadBalancer prerequisite.
+<img width="1217" height="425" alt="Screenshot 2026-02-09 at 11 37 24 AM" src="https://github.com/user-attachments/assets/f1384b43-d7d3-41d0-ace7-ce14c35168de" />
+
+Step 9: We will run same command again:
 ```bash
-curl -O https://raw.githubusercontent.com/kubernetes-sigs/aws-load-balancer-controller/v2.5.4/docs/install/iam_policy.json
+eksctl create iamserviceaccount \
+  --cluster=<your-cluster-name> \
+  --namespace=kube-system \
+  --name=aws-load-balancer-controller \
+  --role-name AmazonEKSLoadBalancerControllerRole \
+--attach-policy-arn=arn:aws:iam::<your-aws-account-id>:policy/AWSLoadBalancerControllerIAMPolicy \
+  --approve --region=us-east-1 --override-existing-serviceaccounts
 ```
-- Create the IAM policy using the command below
+
+<img width="1204" height="463" alt="Screenshot 2026-02-09 at 11 41 38 AM" src="https://github.com/user-attachments/assets/c5d3c02d-3ea1-4ffd-8f4e-d1f1c86a38e8" />
+
+Step 10:  Verify Service Account is create by running:
 ```bash
-aws iam create-policy --policy-name AWSLoadBalancerControllerIAMPolicy --policy-document file://iam_policy.json
+kubectl get sa -n kube-system
 ```
-- Create OIDC Provider
+
+<img width="590" height="142" alt="Screenshot 2026-02-09 at 11 43 55 AM" src="https://github.com/user-attachments/assets/a81beca2-39df-43bd-8945-ddac31344861" />
+
+Step 11: Deploy the ALB Controller using Helm
 ```bash
-eksctl utils associate-iam-oidc-provider --region=us-east-1 --cluster=Three-Tier-K8s-EKS-Cluster --approve
-```
-- Create a Service Account by using the below command and replace your account ID with your one
-```bash
-eksctl create iamserviceaccount --cluster=Three-Tier-K8s-EKS-Cluster --namespace=kube-system --name=aws-load-balancer-controller --role-name AmazonEKSLoadBalancerControllerRole --attach-policy-arn=arn:aws:iam::<your_account_id>:policy/AWSLoadBalancerControllerIAMPolicy --approve --region=us-east-1
-```
-- Run the below command to deploy the AWS Load Balancer Controller
-```bash
-sudo snap install helm --classic
 helm repo add eks https://aws.github.io/eks-charts
 helm repo update eks
-helm install aws-load-balancer-controller eks/aws-load-balancer-controller -n kube-system --set clusterName=my-cluster --set serviceAccount.create=false --set serviceAccount.name=aws-load-balancer-controller
+helm repo list
 ```
-- After 2 minutes, run the command below to check whether your pods are running or not.
+<img width="826" height="231" alt="Screenshot 2026-02-09 at 11 46 09 AM" src="https://github.com/user-attachments/assets/0eb345b2-69f8-4fca-9a47-ea4afda96c6a" />
+
+Step 12: Install the ALB Controller
 ```bash
-kubectl get deployment -n kube-system aws-load-balancer-controller
-```
-- If the pods are getting Error or CrashLoopBackOff, then use the below command
-```bash
-helm upgrade -i aws-load-balancer-controller eks/aws-load-balancer-controller \
-  --set clusterName=<cluster-name> \
+helm install aws-load-balancer-controller eks/aws-load-balancer-controller \            
+  -n kube-system \
+  --set clusterName=<your-cluster-name> \
   --set serviceAccount.create=false \
   --set serviceAccount.name=aws-load-balancer-controller \
-  --set region=us-west-1 --set vpcId=<vpc#> -n kube-system
+  --set region=<region> \
+  --set vpcId=<your-vpc-id>
 ```
+Step 13: Verify the Controller is Running
+```bash
+kubectl get pods -n kube-system
+kubectl get deployment -n kube-system aws-load-balancer-controller
+```
+### For this setup, Argo CD is installed using plain Kubernetes manifests, as recommended for getting started.
+Install Argo CD
+Step 1: Create the Argo CD Namespace
+```bash
+kubectl create namespace argocd
+```
+Step 2: Apply the Argo CD Manifests
+```bash
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+Step 3: Verify Installation
+```bash
+kubectl get pods -n argocd
+```
+Step 4: Check Services:
+```bash
+kubectl get svc -n argocd
+```
+Step 5: Expose Argo CD UI
+```bash
+kubectl edit svc argocd-server -n argocd
+```
+Change: type: ClusterIP to type: LoadBalancer
+
+<img width="420" height="146" alt="image" src="https://github.com/user-attachments/assets/27a93ad8-5e58-42e5-8373-dcc6078acab7" />
+
+Step 6: Then verify and loadbalancer dns name:
+```bash
+kubectl get svc -n argocd
+```
+Step 7: Login to Argo CD
+```bash
+kubectl get secrets -n argocd
+```
+Look for: argocd-initial-admin-secret
+
+Step 8: Decode the Password
+```bash
+kubectl get secret argocd-initial-admin-secret \
+  -n argocd \
+  -o jsonpath="{.data.password}" | base64 --decode
+```
+
+
 ### Step 7: We need to create Amazon ECR Private Repositories for both Tiers (Frontend & Backend)
 - Click on Create repository
 - Select the Private option to provide the repository and click on Save.
