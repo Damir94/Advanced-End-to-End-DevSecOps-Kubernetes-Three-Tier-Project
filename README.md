@@ -779,286 +779,57 @@ kubectl get secret argocd-initial-admin-secret \
   -o jsonpath="{.data.password}" | base64 --decode
 ```
 
+### we will configure SonarQube for our DevSecOps Pipeline
+Step 1: To do that, copy your Jenkins Server public IP and paste it into your favourite browser with a 9000 port
+```bash
+curl ifconfig.me
+```
+Step 2: The username and password will be admin and Click on Log In.
 
-### Step 7: We need to create Amazon ECR Private Repositories for both Tiers (Frontend & Backend)
-- Click on Create repository
-- Select the Private option to provide the repository and click on Save.
-- Do the same for the backend repository and click on Save
-- Now, we have set up our ECR Private Repository and
-- Now, we need to configure ECR locally because we have to upload our images to Amazon ECR.
-- Copy the 1st command for login
-- Now, run the copied command on your Jenkins Server.
+<img width="720" height="127" alt="image" src="https://github.com/user-attachments/assets/53511e88-715f-46b7-877e-900f500184a1" />
 
-### Step 8: Install & Configure ArgoCD
-- We will be deploying our application on a three-tier namespace. To do that, we will create a three-tier namespace on EKS
-```bash
-kubectl create namespace three-tier
-```
-- As you know, our two ECR repositories are private. So, when we try to push images to the ECR Repos, it will give us the error ImagePullError.
-- To get rid of this error, we will create a secret for our ECR Repo by the below command and then, we will add this secret to the deployment file.
-- Note: The Secrets are coming from the .docker/config.json file, which is created while logging the ECR in the earlier steps
-```bash
-kubectl create secret generic ecr-registry-secret \
-  --from-file=.dockerconfigjson=${HOME}/.docker/config.json \
-  --type=kubernetes.io/dockerconfigjson --namespace three-tier
-kubectl get secrets -n three-tier
-```
-- Now, we will install argoCD.
-- To do that, create a separate namespace for it and apply the argocd configuration for installation.
-```bash
-kubectl create namespace argocd
-kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.4.7/manifests/install.yaml
-```
-- All pods must be running. To validate, run the command below
-```bash
-kubectl get pods -n argocd
-```
-- Now, expose the argoCD server as a LoadBalancer using the below command
-```bash
-kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
-```
-- You can validate whether the Load Balancer is created or not by going to the AWS Console
-- To access the argoCD, copy the LoadBalancer DNS and hit it on your favourite browser.
-- You will get a warning like the snippet below.
-- Click on Advanced.
-- Click on the link below, which is appearing under Hide advanced
-- Now, we need to get the password for our argoCD server to perform the deployment.
-- To do that, we have a prerequisite, which is jq. Install it by the command below.
-```bash
-sudo apt install jq -y
-```
-```bash
-export ARGOCD_SERVER=$(kubectl get svc argocd-server -n argocd -o json | jq -r '.status.loadBalancer.ingress[0].hostname')
-export ARGO_PWD=$(kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d)
-```
-- Enter the username and password in argoCD and click on SIGN IN.
-- Here is our ArgoCD Dashboard.
+Step 3: Update the password
 
-### Step 9: Now, we have to configure SonarQube for our DevSecOps Pipeline
-- To do that, copy your Jenkins Server public IP and paste it into your favourite browser with a 9000 port
-- The username and password will be admin
-- Click on Log In.
-- Update the password
-- Click on Administration, then Security, and select Users
-- Click on Update tokens
-- Click on Generate
-- Copy the token, keep it somewhere safe and click on Done.
-- Now, we have to configure webhooks for quality checks.
-- Click on Administration, then Configuration, and select Webhooks
-- Click on Create
-- Provide the name of your project and in the URL, provide the Jenkins server public IP with port 8080, add sonarqube-webhook in the suffix, and click on Create.
+<img width="720" height="242" alt="image" src="https://github.com/user-attachments/assets/404fbaab-c67f-4d85-8643-766be7b5d126" />
+
+Step 4: Click on Administration, then Security, and select Users
+
+<img width="720" height="124" alt="image" src="https://github.com/user-attachments/assets/6b47578f-da83-4d39-8a15-45c8d7928854" />
+
+Step 5: Click on Update tokens
+
+<img width="720" height="176" alt="image" src="https://github.com/user-attachments/assets/53b07ccc-1f4e-4e44-845a-3af8dec297d6" />
+
+Step 6: Click on Generate
+
+<img width="720" height="176" alt="image" src="https://github.com/user-attachments/assets/3b258a6d-cf2f-47aa-ae4f-a8ae1651c7e6" />
+
+Step 7: Copy the token, keep it somewhere safe and click on Done.
+
+<img width="720" height="215" alt="image" src="https://github.com/user-attachments/assets/c9f312a1-eb5e-4f75-b35c-b92459debe7e" />
+Now, we have to configure webhooks for quality checks.
+
+Step 8: Click on Administration, then Configuration, and select Webhooks
+
+<img width="720" height="93" alt="image" src="https://github.com/user-attachments/assets/c2af05d0-86bd-4c2a-88ef-2256156bbda6" />
+
+Step 9: Click on Create
+
+<img width="720" height="123" alt="image" src="https://github.com/user-attachments/assets/7dc0dbb0-5781-4a56-a460-b3046354833e" />
+
+Step 10: Provide the name of your project and in the URL, provide the Jenkins server public IP with port 8080, add sonarqube-webhook in the suffix, and click on Create.
 ```bash
 http://<jenkins-server-public-ip>:8080/sonarqube-webhook/
 ```
-- Here, you can see the webhook.
-- Now, we have to create a Project for the frontend code.
-- Click on Manually.
-- Provide the display name to your Project and click on Setup
-- Click on Locally.
-- Select the Use existing token and click on Continue.
-- Select Other and Linux as OS.
-- After performing the above steps, you will get the command, which you can see in the snippet below.
-- Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
-- Now, we have to create a Project for the backend code.
-- Click on Create Project.
-- Provide the name of your project and click on Set up.
-- Click on Locally.
-- Select the Use existing token and click on Continue.
-- Select Other and Linux as OS.
-- After performing the above steps, you will get the command, which you can see in the snippet below.
-- Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
-- Now, we have to create a Project for the backend code.
-- Click on Create Project.
-- Provide the name of your project and click on Set up.
-- Click on Locally.
-- Select the Use existing token and click on Continue.
-- Select Other and Linux as OS.
-- After performing the above steps, you will get the command, which you can see in the snippet below.
-- Now, use the command in the Jenkins Backend Pipeline where Code Quality Analysis will be performed.
-- Now, we have to store the sonar credentials.
-- Go to Dashboard -> Manage Jenkins -> Credentials
-- Select the kind as Secret text, paste your token in Secret and keep other things as it is.
-- Click on Create
-- Now, we have to store the GitHub Personal access token to push the deployment file, which will be modified in the pipeline itself for the ECR image.
-- Add GitHub credentials
-- Select the kind as Secret text and paste your GitHub Personal access token(not password) in Secret, and keep other things as it is.
-- Click on Create
-- Note: If you haven’t generated your token, you generate it first, then paste it into the Jenkins
-- Now, according to our Pipeline, we need to add an Account ID in the Jenkins credentials because of the ECR repo URI.
-- Select the kind as Secret text, paste your AWS Account ID in Secret and keep other things as it is.
-- Click on Create
-- Now, we need to provide our ECR image name for the frontend, which is frontend only.
-- Select the kind as Secret text, paste your frontend repo name in Secret and keep other things as it is.
-- Click on Create
-- Now, we need to provide our ECR image name for the backend, which is backend only.
-- Select the kind as Secret text, paste your backend repo name in Secret, and keep other things as it is.
-- Click on Create
-- Final Snippet of all Credentials that we needed to implement this project.
 
-### Step 10: Install the required plugins and configure the plugins to deploy our Three-Tier Application
-- Install the following plugins by going to Dashboard -> Manage Jenkins -> Plugins -> Available Plugins
-```bash
-Docker
-Docker Commons
-Docker Pipeline
-Docker API
-docker-build-step
-Eclipse Temurin installer
-NodeJS
-OWASP Dependency-Check
-SonarQube Scanner
-```
-- Now, we have to configure the installed plugins.
-- Go to Dashboard -> Manage Jenkins -> Tools
-- We are configuring JDK
-- Search for JDK and provide the configuration like the snippet below.
-- Now, we will configure the SonarQube scanner
-- Search for the SonarQube scanner and provide the configuration like the snippet below.
-- Now, we will configure nodejs
-- Search for the node and provide the configuration, like the snippet below.
-- Now, we will configure the OWASP Dependency Check
-- Search for Dependency-Check and provide the configuration like the snippet below.
-- Now, we will configure the Docker
-- Search for Docker and provide the configuration like the snippet below.
-- Now, we have to set the path for SonarQube in Jenkins
-- Go to Dashboard -> Manage Jenkins -> System
-- Search for SonarQube installations
-- Provide the name as it is, then in the Server URL, copy the SonarQube public IP (same as Jenkins) with port 9000, select the Sonar token that we have added recently, and click on Apply & Save.
-- Now, we are ready to create our Jenkins Pipeline to deploy our Backend Code.
-- Go to Jenkins Dashboard
-- Click on New Item
-- Provide the name of your Pipeline and click on OK.
-- This is the Jenkins file to deploy the Backend Code on EKS.
-- Copy and paste it into the Jenkins
-```bash
-https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project/blob/master/Jenkins-Pipeline-Code/Jenkinsfile-Backend
-```
-- Click Apply & Save.
-- Now, click on the build.
-- Our pipeline was successful after addressing a few common mistakes.
-- Note: Do the changes in the Pipeline according to your project.
-- Now, we are ready to create our Jenkins Pipeline to deploy our Frontend Code.
-- Go to Jenkins Dashboard
-- Click on New Item
-- Provide the name of your Pipeline and click on OK.
-- This is the Jenkins file to deploy the Frontend Code on EKS.
-- Copy and paste it into the Jenkins
-```bash
-https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project/blob/master/Jenkins-Pipeline-Code/Jenkinsfile-Frontend
-```
-- Click Apply & Save.
-- Now, click on the build.
-- Our pipeline was successful after a few common mistakes.
-- Note: Do the changes in the Pipeline according to your project.
+<img width="720" height="290" alt="image" src="https://github.com/user-attachments/assets/6d04abfe-ca0b-433b-8ea2-1812c5661397" />
 
-### Setup 11: We will set up the Monitoring for our EKS Cluster. We can monitor the Cluster Specifications and other necessary things.
-- We will achieve the monitoring using Helm
-- Add the Prometheus repo by using the command below
-```bash
-helm repo add stable https://charts.helm.sh/stable
-```
-- Install the Prometheus
-```bash
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm install prometheus prometheus-community/prometheus
-helm repo add grafana https://grafana.github.io/helm-charts
-helm repo update
-helm install grafana grafana/grafana
-```
-- Now, check the service by the command below
-```bash
-kubectl get svc
-```
-- Now, we need to access our Prometheus and Grafana consoles from outside of the cluster.
-- For that, we need to change the Service type from ClusterType to LoadBalancer
-- Edit the stable-kube-prometheus-sta-prometheus service
-```bash
-kubectl edit svc stable-kube-prometheus-sta-prometheus
-```
-- Modification in the 48th line from ClusterType to LoadBalancer
-- Edit the stable-grafana service
-```bash
-kubectl edit svc stable-grafana
-```
-- Modification in the 39th line from ClusterType to LoadBalancer
-- Now, if you list the service again, then you will see the LoadBalancers' DNS names
-```bash
-kubectl get svc
-```
-- You can also validate from your console.
-- Now, access your Prometheus Dashboard
-- Paste the <Prometheus-LB-DNS>:9090 in your favourite browser, and you will see it like this
-- Click on Status and select Target.
-- You will see a lot of Targets
-- Now, access your Grafana Dashboard
-- Copy the ALB DNS of Grafana and paste it into your favourite browser.
-- The username will be admin, and the password will be prom-operator for your Grafana LogIn.
-- Now, click on Data Source
-- Select Prometheus
-- In the Connection, paste your <Prometheus-LB-DNS>:9090.
-- If the URL is correct, then you will see a green notification/
-- Click on Save & test.
-- Now, we will create a dashboard to visualise our Kubernetes Cluster Logs.
-- Click on Dashboard.
-- Once you click on Dashboard. You will see a lot of Kubernetes components being monitored.
-- Let’s try to import a type of Kubernetes Dashboard.
-- Click on New and select Import
-- Provide 6417 ID and click on Load
-- Note: 6417 is a unique ID from Grafana, which is used to monitor and visualise Kubernetes Data
-- Select the data source that you have created earlier and click on Import.
-- Here, you go.
-- You can view your Kubernetes Cluster Data.
-- Feel free to explore the other details of the Kubernetes Cluster.
+Step 11: Here, you can see the webhook.
 
-### Step 12: We will deploy our Three-Tier Application using ArgoCD.
-- As our repository is private. So, we need to configure the Private Repository in ArgoCD.
-- Click on Settings and select Repositories
-- Click on CONNECT REPO USING HTTPS
-- Now, provide the repository name where your Manifest files are present.
-- Provide the username and GitHub Personal Access token and click on CONNECT.
-- If your Connection Status is Successful, it means the repository connected successfully.
-- Now, we will create our first application, which will be a database.
-- Click on CREATE APPLICATION.
-- Provide the details as it is provided in the snippet below and scroll down.
-- Select the same repository that you configured in the earlier step.
-- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
-- Click on CREATE.
-- While your database Application is starting to deploy, we will create an application for the backend.
-- Provide the details as it is provided in the snippet below and scroll down.
-- Select the same repository that you configured in the earlier step.
-- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
-- Click on CREATE.
-- While your backend Application is starting to deploy, we will create an application for the frontend.
-- Provide the details as it is provided in the snippet below and scroll down.
-- Select the same repository that you configured in the earlier step.
-- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
-- Click on CREATE.
-- While your frontend Application is starting to deploy, we will create an application for the ingress.
-- Provide the details as it is provided in the snippet below and scroll down.
-- Select the same repository that you configured in the earlier step.
-- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
-- Click on CREATE.
-- Once your Ingress application is deployed. It will create an Application Load Balancer
-- You can check out the load balancer named k8s-three.
-- Now, copy the ALB-DNS and go to your Domain Provider. In my case, Porkbun is the domain provider.
-- Go to DNS and add a CNAME type with hostname backend, then add your ALB in the Answer and click on Save
-- Note: I have created a subdomain backend.amanpathakdevops.study
-- You can see all 4 application deployments in the snippet below.
-- Now, hit your subdomain after 2 to 3 minutes in your browser to see the magic.
-- You can play with the application by adding the records.
-- You can play with the application by deleting the records.
-- Now, you can see your Grafana Dashboard to view the EKS data, such as pods, namespace, deployments, etc.
-- If you want to monitor the three-tier namespace.
-- In the namespace, replace three-tier with another namespace.
-- You will see the deployments that are done by ArgoCD
-- This is the Ingress Application Deployment in ArgoCD
-- This is the Frontend Application Deployment in ArgoCD
-- This is the Backend Application Deployment in ArgoCD
-- This is the Database Application Deployment in ArgoCD
-- If you observe, we have configured the Persistent Volume & Persistent Volume Claim. So, if the pods get deleted, then the data won’t be lost. The Data will be stored on the host machine.
-- To validate it, delete both Database pods.
-- Now, the new pods will be started.
-- And Your Application won’t lose a single piece of data.
+<img width="1600" height="326" alt="image" src="https://github.com/user-attachments/assets/3a0e64d4-82c2-489f-a0ce-2021b6c0875c" />
+
+
+
 
 ### Conclusion
 - In this comprehensive DevSecOps Kubernetes project, we successfully:
