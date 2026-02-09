@@ -807,6 +807,7 @@ Step 6: Click on Generate
 Step 7: Copy the token, keep it somewhere safe and click on Done.
 
 <img width="720" height="215" alt="image" src="https://github.com/user-attachments/assets/c9f312a1-eb5e-4f75-b35c-b92459debe7e" />
+
 Now, we have to configure webhooks for quality checks.
 
 Step 8: Click on Administration, then Configuration, and select Webhooks
