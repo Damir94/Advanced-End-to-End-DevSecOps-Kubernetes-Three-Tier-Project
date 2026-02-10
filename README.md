@@ -1272,7 +1272,106 @@ Step 5: Click Apply & Save.
 
 <img width="720" height="323" alt="image" src="https://github.com/user-attachments/assets/feb81290-cc92-4c1c-99cf-3966e1aedbb0" />
 
+### We will deploy our Three-Tier Application using ArgoCD.
+As our repository is private. So, we need to configure the Private Repository in ArgoCD.
 
+Step 1: Click on Settings and select Repositories
+
+<img width="720" height="283" alt="image" src="https://github.com/user-attachments/assets/e757c6c6-c6fe-4762-a106-3d8044acd7b2" />
+
+Step 2: Click on CONNECT REPO USING HTTPS
+
+<img width="1600" height="628" alt="image" src="https://github.com/user-attachments/assets/87aafbad-2f7a-49b4-8d24-eeb96f3b44d9" />
+
+Step 3: Provide the repository name where your Manifest files are present.
+- Provide the username and GitHub Personal Access token and click on CONNECT.
+
+<img width="1600" height="628" alt="image" src="https://github.com/user-attachments/assets/ee06ccef-08e1-43e3-98e6-7ec6866cfc42" />
+
+Step 4: If your Connection Status is Successful, it means the repository connected successfully.
+
+<img width="1600" height="207" alt="image" src="https://github.com/user-attachments/assets/de91ba8d-c55f-400c-bc61-44e4644fdfa2" />
+
+### we will create our first application, which will be a database.
+
+Step 1: Click on CREATE APPLICATION.
+
+<img width="720" height="209" alt="image" src="https://github.com/user-attachments/assets/7c2d2c80-e4d2-41b6-97bb-da2fb7667336" />
+
+Step 2: Provide the details as it is provided in the snippet below and scroll down.
+
+<img width="720" height="209" alt="image" src="https://github.com/user-attachments/assets/634d4cdd-b144-4c56-ab43-bf6fd8f7e4fa" />
+
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+
+Step 3: Click on CREATE.
+
+<img width="1600" height="605" alt="image" src="https://github.com/user-attachments/assets/c26c1b02-5ccb-439e-b401-90e107dace50" />
+
+### While your database Application is starting to deploy, we will create an application for the backend.
+
+Step 1: Provide the details as it is provided in the snippet below and scroll down.
+
+<img width="720" height="191" alt="image" src="https://github.com/user-attachments/assets/24b6f351-8edf-443e-95e8-666b8a75c602" />
+
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+
+Step 2: Click on CREATE.
+
+<img width="720" height="282" alt="image" src="https://github.com/user-attachments/assets/75c35724-181d-4ab4-9a17-6bf2e1bf91de" />
+
+### While your backend Application is starting to deploy, we will create an application for the frontend.
+
+Step 1: Provide the details as it is provided in the snippet below and scroll down.
+
+<img width="720" height="161" alt="image" src="https://github.com/user-attachments/assets/b5ed2957-c6fd-4683-bf4d-aa93b7e3870d" />
+
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+
+Step 2: Click on CREATE.
+
+<img width="720" height="272" alt="image" src="https://github.com/user-attachments/assets/53ff4114-2a40-4bd4-96a6-91222cedd745" />
+
+### While your frontend Application is starting to deploy, we will create an application for the ingress.
+
+Step 1: Provide the details as it is provided in the snippet below and scroll down.
+
+<img width="1600" height="353" alt="image" src="https://github.com/user-attachments/assets/86d1eb3a-12c8-4b43-b25c-d5f210db6a19" />
+
+- Select the same repository that you configured in the earlier step.
+- In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
+
+Step 2: Click on CREATE.
+
+<img width="720" height="278" alt="image" src="https://github.com/user-attachments/assets/bc50e855-d76c-4658-b7fd-d9d70511cf8b" />
+
+- Once your Ingress application is deployed. It will create an Application Load Balancer
+- You can check out the load balancer named k8s-three.
+
+<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/d46d76c2-7ee6-4a11-9185-d8745ff2ee60" />
+
+- Now, copy the ALB-DNS and go to your Domain Provider. In my case, Porkbun is the domain provider.
+- Go to DNS and add a CNAME type with hostname backend, then add your ALB in the Answer and click on Save
+- Note: I have created a subdomain backend.amanpathakdevops.study
+
+<img width="1600" height="564" alt="image" src="https://github.com/user-attachments/assets/79d2d905-c362-464e-a968-73e2de341277" />
+
+- You can see all 4 application deployments in the snippet below.
+
+<img width="720" height="365" alt="image" src="https://github.com/user-attachments/assets/885a7d28-5870-458b-96ae-853c6e94f049" />
+
+- Hit your subdomain after 2 to 3 minutes in your browser to see the magic.
+
+<img width="720" height="379" alt="image" src="https://github.com/user-attachments/assets/938a15a1-a0a9-4e0d-acd5-5230e4ed4b59" />
+
+- You can play with the application by adding the records.
+
+<img width="720" height="379" alt="image" src="https://github.com/user-attachments/assets/29106efe-926b-4391-b6f6-48def0b3f04e" />
+
+- You can play with the application by deleting the records.
 
 ### Conclusion
 - In this comprehensive DevSecOps Kubernetes project, we successfully:
