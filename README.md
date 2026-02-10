@@ -877,7 +877,7 @@ After performing the above steps, you will get the command, which you can see in
 
 Use the command in the Jenkins Backend Pipeline where Code Quality Analysis will be performed.
 
-### We will store the sonar credentials.
+### We will store Sonar credentials.
 
 Step 1: Go to Dashboard -> Manage Jenkins -> Credentials
 
@@ -906,6 +906,44 @@ Step 1: Select the kind as Secret text, paste your AWS Account ID in Secret and 
 Step 2: Click on Create
 
 <img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/a6ff10f7-48e6-4940-a6b9-bb7a4b5a3aab" />
+
+### We will create Amazon ECR Private Repositories for both Tiers (Frontend & Backend)
+
+Step 1: Click on Create repository
+
+<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/e3db6694-3787-4b92-a69a-106d304278f5" />
+
+Step 2: Select the Private option to provide the repository and click on Save.
+
+<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/f45f99fa-8482-40db-80b2-f4b7cd6624db" />
+
+Step 3: Do the same for the backend repository and click on Save
+
+<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/2b531e3a-9e2b-466f-8154-3043e14d6743" />
+
+Step 4: we have set up our ECR Private Repository
+
+<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/f547c539-d518-4e8b-bdb4-cd84227d53ef" />
+
+### We will provide our ECR image name for the frontend, which is frontend only.
+
+Step 1: Select the kind as Secret text, paste your frontend repo name in Secret and keep other things as it is.
+
+Step 2: Click on Create
+
+<img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/5a046e33-81eb-4343-89bd-94e2accd0f42" />
+
+### We will provide our ECR image name for the backend, which is backend only.
+
+Step 1: Select the kind as Secret text, paste your backend repo name in Secret, and keep other things as it is.
+
+Step 2: Click on Create
+
+<img width="1600" height="559" alt="image" src="https://github.com/user-attachments/assets/6b8c179c-e9b9-4490-8e61-71280e1edd24" />
+
+### Final Snippet of all Credentials that we needed to implement this project.
+
+<img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/8de64a75-0337-479e-8bfa-e62674bbe344" />
 
 
 
