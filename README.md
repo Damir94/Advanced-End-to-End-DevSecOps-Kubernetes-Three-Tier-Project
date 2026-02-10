@@ -829,6 +829,83 @@ Step 11: Here, you can see the webhook.
 
 <img width="1600" height="326" alt="image" src="https://github.com/user-attachments/assets/3a0e64d4-82c2-489f-a0ce-2021b6c0875c" />
 
+Step 11: We will create a Project for the frontend code. Click on Manually.
+
+<img width="720" height="260" alt="image" src="https://github.com/user-attachments/assets/d492103c-e097-4d6e-af46-a5b93c80c471" />
+
+Step 12: Provide the display name to your Project and click on Setup
+
+<img width="1600" height="480" alt="image" src="https://github.com/user-attachments/assets/b2ebf24c-9fe1-4aea-b3e1-9a4f8b407d8d" />
+
+Step 13: Click on Locally.
+
+<img width="720" height="273" alt="image" src="https://github.com/user-attachments/assets/00d1cbaa-6cca-4d08-ac78-b13e4acdddff" />
+
+Step 14: Select the Use existing token and click on Continue.
+
+<img width="720" height="203" alt="image" src="https://github.com/user-attachments/assets/fc461202-2475-4191-911b-a01e65e3a28d" />
+
+Step 15: Select Other and Linux as OS.
+
+<img width="720" height="347" alt="image" src="https://github.com/user-attachments/assets/90b26a17-3f1c-4b5a-8206-6d943729b86a" />
+
+After performing the above steps, you will get the command, which you can see in the snippet above.
+
+Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
+
+Step 16: We will create a Project for the backend code. Click on Create Project.
+
+<img width="720" height="135" alt="image" src="https://github.com/user-attachments/assets/0b4399cd-5163-4c41-b5a4-110c460eebc0" />
+
+Step 17: Provide the name of your project and click on Set up.
+
+<img width="720" height="215" alt="image" src="https://github.com/user-attachments/assets/09824f6c-7185-4634-98d7-010a7f08726c" />
+
+Step 18: Click on Locally.
+
+<img width="720" height="269" alt="image" src="https://github.com/user-attachments/assets/f79e9ace-9ae0-4fbe-9f94-49e49b431ca6" />
+
+Step 19: Select the Use existing token and click on Continue.
+
+<img width="720" height="204" alt="image" src="https://github.com/user-attachments/assets/8b132c92-4b17-477d-88ec-6ac0ef3780bd" />
+
+Step 20: Select Other and Linux as OS.
+
+<img width="720" height="347" alt="image" src="https://github.com/user-attachments/assets/5b40135f-eeb2-4dc4-8f05-82c676f6cb4f" />
+
+After performing the above steps, you will get the command, which you can see in the snippet above.
+
+Use the command in the Jenkins Backend Pipeline where Code Quality Analysis will be performed.
+
+### We will store the sonar credentials.
+
+Step 1: Go to Dashboard -> Manage Jenkins -> Credentials
+
+Step 2: Select the kind as Secret text, paste your token in Secret and keep other things as it is.
+
+Step 3: Click on Create
+
+<img width="1600" height="559" alt="image" src="https://github.com/user-attachments/assets/66bbd523-1673-4366-8a11-eb3a9d3aa097" />
+
+### We will store the GitHub Personal access token to push the deployment file, which will be modified in the pipeline itself for the ECR image.
+
+Step 1: Add GitHub credentials
+
+Step 2: Select the kind as Secret text and paste your GitHub Personal access token(not password) in Secret, and keep other things as it is.
+
+Step 3: Click on Create
+
+Note: If you haven’t generated your token, you generate it first, then paste it into the Jenkins
+
+<img width="1600" height="559" alt="image" src="https://github.com/user-attachments/assets/ac36f771-b49d-4a8e-bdb8-ca54aeefd1c5" />
+
+### According to our Pipeline, we will add an AWS Account ID in the Jenkins credentials because of the ECR repo URI.
+
+Step 1: Select the kind as Secret text, paste your AWS Account ID in Secret and keep other things as it is.
+
+Step 2: Click on Create
+
+<img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/a6ff10f7-48e6-4940-a6b9-bb7a4b5a3aab" />
 
 
 
