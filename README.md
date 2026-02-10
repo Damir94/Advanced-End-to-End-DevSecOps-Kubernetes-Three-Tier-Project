@@ -1136,6 +1136,11 @@ pipeline {
     }
 }
 ```
+Step 5: Click Apply & Save. Click on the build.
+- Our pipeline was successful after addressing a few common mistakes.
+- Note: Do the changes in the Pipeline according to your project.
+
+<img width="720" height="344" alt="image" src="https://github.com/user-attachments/assets/905277ca-a890-4b8e-b0f8-cc06bebada45" />
  
 ### Conclusion
 - In this comprehensive DevSecOps Kubernetes project, we successfully:
