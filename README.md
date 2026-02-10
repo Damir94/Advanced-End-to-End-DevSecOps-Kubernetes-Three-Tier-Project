@@ -945,8 +945,198 @@ Step 2: Click on Create
 
 <img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/8de64a75-0337-479e-8bfa-e62674bbe344" />
 
+### Install the required plugins and configure the plugins to deploy our Three-Tier Application
+
+Step 1: Install the following plugins by going to Dashboard -> Manage Jenkins -> Plugins -> Available Plugins
+```bash
+Docker
+Docker Commons
+Docker Pipeline
+Docker API
+docker-build-step
+Eclipse Temurin installer
+NodeJS
+OWASP Dependency-Check
+SonarQube Scanner
+```
+
+<img width="720" height="338" alt="image" src="https://github.com/user-attachments/assets/d4ddacb0-ffb8-4d1b-831c-017546638c3e" />
+
+### We will configure the installed plugins.
+
+Step 1: Go to Dashboard -> Manage Jenkins -> Tools
+
+Step 2: We are configuring JDK
+
+Step 3: Search for JDK and provide the configuration like the snippet below.
 
 
+<img width="720" height="271" alt="image" src="https://github.com/user-attachments/assets/b3f1904d-ddf5-4ec2-8d80-82bafd020f61" />
+
+### We will configure the SonarQube scanner
+
+Step 1: Search for the SonarQube scanner and provide the configuration like the snippet below.
+
+<img width="720" height="266" alt="image" src="https://github.com/user-attachments/assets/59dbb3a6-2973-4d38-86a4-e26652855729" />
+
+### We will configure nodejs
+
+Step 1: Search for the node and provide the configuration, like the snippet below.
+
+<img width="720" height="369" alt="image" src="https://github.com/user-attachments/assets/67ef012c-6014-4382-8120-bc74a1c8a573" />
+
+### We will configure the OWASP Dependency Check
+
+Step 1: Search for Dependency-Check and provide the configuration like the snippet below.
+
+<img width="720" height="272" alt="image" src="https://github.com/user-attachments/assets/7d96b612-b67a-4612-9d84-fd0c80db42ca" />
+
+### we will configure the Docker
+
+Step 1: Search for Docker and provide the configuration like the snippet below.
+
+<img width="720" height="272" alt="image" src="https://github.com/user-attachments/assets/f379122e-1d2c-4293-93ed-b65f8e4ef7aa" />
+
+### We will set the path for SonarQube in Jenkins
+
+Step 1: Go to Dashboard -> Manage Jenkins -> System
+
+Step 2: Search for SonarQube installations
+
+Step 3: Provide the name as it is, then in the Server URL, copy the SonarQube public IP (same as Jenkins) with port 9000, select the Sonar token that we have added recently, and click on Apply & Save.
+
+<img width="720" height="365" alt="image" src="https://github.com/user-attachments/assets/92940f17-12cb-4b12-9b66-bf2e6cf5b73a" />
+
+### We are ready to create our Jenkins Pipeline to deploy our Backend Code.
+
+Step 1: Go to Jenkins Dashboard
+
+Step 2: Click on New Item
+
+<img width="720" height="154" alt="image" src="https://github.com/user-attachments/assets/956be226-dc19-40a1-b79f-33090e2c3410" />
+
+Step 3: Provide the name of your Pipeline and click on OK.
+
+<img width="720" height="195" alt="image" src="https://github.com/user-attachments/assets/9a1da444-6985-4145-9726-a5a740a1658d" />
+
+Step 4: This is the Jenkins file to deploy the Backend Code on EKS. Copy and paste it into the Jenkins
+
+```groovy
+pipeline {
+    agent any 
+    tools {
+        jdk 'jdk'
+        nodejs 'nodejs'
+    }
+    environment  {
+        SCANNER_HOME=tool 'sonar-scanner'
+        AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
+        AWS_ECR_REPO_NAME = credentials('ECR_REPO2')
+        AWS_DEFAULT_REGION = 'us-east-1'
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
+    }
+    stages {
+        stage('Cleaning Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+        stage('Checkout from Git') {
+            steps {
+                git credentialsId: 'GITHUB', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+            }
+        }
+        stage('Sonarqube Analysis') {
+            steps {
+                dir('Application-Code/backend') {
+                    withSonarQubeEnv('sonar-server') {
+                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
+                        -Dsonar.projectName=three-tier-backend \
+                        -Dsonar.projectKey=three-tier-backend '''
+                    }
+                }
+            }
+        }
+        stage('Quality Check') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                }
+            }
+        }
+        stage('OWASP Dependency-Check Scan') {
+            steps {
+                dir('Application-Code/backend') {
+                    dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
+                    dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                }
+            }
+        }
+        stage('Trivy File Scan') {
+            steps {
+                dir('Application-Code/backend') {
+                    sh 'trivy fs . > trivyfs.txt'
+                }
+            }
+        }
+        stage("Docker Image Build") {
+            steps {
+                script {
+                    dir('Application-Code/backend') {
+                            sh 'docker system prune -f'
+                            sh 'docker container prune -f'
+                            sh 'docker build -t ${AWS_ECR_REPO_NAME} .'
+                    }
+                }
+            }
+        }
+        stage("ECR Image Pushing") {
+            steps {
+                script {
+                        sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}'
+                        sh 'docker tag ${AWS_ECR_REPO_NAME} ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
+                        sh 'docker push ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
+                }
+            }
+        }
+        stage("TRIVY Image Scan") {
+            steps {
+                sh 'trivy image ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} > trivyimage.txt' 
+            }
+        }
+        stage('Checkout Code') {
+            steps {
+                git credentialsId: 'GITHUB', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+            }
+        }
+        stage('Update Deployment file') {
+            environment {
+                GIT_REPO_NAME = "End-to-End-Kubernetes-Three-Tier-DevSecOps-Project"
+                GIT_USER_NAME = "AmanPathak-DevOps"
+            }
+            steps {
+                dir('Kubernetes-Manifests-file/Backend') {
+                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                        sh '''
+                            git config user.email "aman07pathak@gmail.com"
+                            git config user.name "AmanPathak-DevOps"
+                            BUILD_NUMBER=${BUILD_NUMBER}
+                            echo $BUILD_NUMBER
+                            imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
+                            echo $imageTag
+                            sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
+                            git add deployment.yaml
+                            git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                        '''
+                    }
+                }
+            }
+        }
+    }
+}
+```
+ 
 ### Conclusion
 - In this comprehensive DevSecOps Kubernetes project, we successfully:
   - Established IAM user and Terraform for AWS setup.
