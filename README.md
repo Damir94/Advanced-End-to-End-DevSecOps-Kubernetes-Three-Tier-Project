@@ -1294,18 +1294,23 @@ Step 4: If your Connection Status is Successful, it means the repository connect
 
 ### we will create our first application, which will be a database.
 
-Step 1: Click on CREATE APPLICATION.
+Step 1: We will create namaspace called three-tier in the eks cluste manually through jump server:
+```bash
+kubectl create namespace three-tier
+```
+
+Step 2: Click on CREATE APPLICATION.
 
 <img width="720" height="209" alt="image" src="https://github.com/user-attachments/assets/7c2d2c80-e4d2-41b6-97bb-da2fb7667336" />
 
-Step 2: Provide the details as it is provided in the snippet below and scroll down.
+Step 3: Provide the details as it is provided in the snippet below and scroll down.
 
 <img width="720" height="209" alt="image" src="https://github.com/user-attachments/assets/634d4cdd-b144-4c56-ab43-bf6fd8f7e4fa" />
 
 - Select the same repository that you configured in the earlier step.
 - In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
 
-Step 3: Click on CREATE.
+Step 4: Click on CREATE.
 
 <img width="1600" height="605" alt="image" src="https://github.com/user-attachments/assets/c26c1b02-5ccb-439e-b401-90e107dace50" />
 
@@ -1372,6 +1377,121 @@ Step 2: Click on CREATE.
 <img width="720" height="379" alt="image" src="https://github.com/user-attachments/assets/29106efe-926b-4391-b6f6-48def0b3f04e" />
 
 - You can play with the application by deleting the records.
+
+### We will set up the Monitoring for our EKS Cluster. We can monitor the Cluster Specifications and other necessary things.
+
+Step 1: We will achieve the monitoring using Helm. Add the Prometheus repo by using the command below
+```bash
+helm repo add stable https://charts.helm.sh/stable
+```
+
+<img width="1600" height="212" alt="image" src="https://github.com/user-attachments/assets/7c9107bd-de09-4bff-abc7-a9d56297698f" />
+
+Step 2: Install the Prometheus
+```bash
+helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+helm install prometheus prometheus-community/prometheus
+helm repo add grafana https://grafana.github.io/helm-charts
+helm repo update
+helm install grafana grafana/grafana
+```
+
+<img width="720" height="107" alt="image" src="https://github.com/user-attachments/assets/05c0c6ee-b774-45b8-a6da-8376e3fa570f" />
+
+Step 3: Now, check the service by the command below
+```bash
+kubectl get svc
+kubectl get deploy
+```
+
+<img width="1600" height="237" alt="image" src="https://github.com/user-attachments/assets/8cce7652-04f1-46d9-87b2-402bcb61c4c7" />
+
+### We will access our Prometheus and Grafana consoles from outside of the cluster.
+
+Step 1: We need to change the Service type from ClusterType to LoadBalancer. Edit the stable-kube-prometheus-sta-prometheus service
+```bash
+kubectl edit svc stable-kube-prometheus-sta-prometheus
+```
+Modification in the 48th line from ClusterType to LoadBalancer
+
+<img width="720" height="107" alt="image" src="https://github.com/user-attachments/assets/e68335ba-76d2-42d3-b70c-8780854dc596" />
+
+Step 2: Edit the stable-grafana service
+```bash
+kubectl edit svc stable-grafana
+```
+Modification in the 39th line from ClusterType to LoadBalancer
+
+<img width="720" height="80" alt="image" src="https://github.com/user-attachments/assets/682ae3cc-89fe-40ce-acd4-70d7e0471125" />
+
+Step 3: Now, if you list the service again, then you will see the LoadBalancers' DNS names
+```bash
+kubectl get svc
+```
+<img width="720" height="89" alt="image" src="https://github.com/user-attachments/assets/3f0dab15-5857-4421-8e0c-d037eded0a73" />
+
+Step 4: You can also validate from your console.
+
+<img width="1600" height="293" alt="image" src="https://github.com/user-attachments/assets/643949c8-635d-4b77-9d45-eb7eb98fed6b" />
+
+Step 5: Access your Prometheus Dashboard
+```bash
+Paste the <Prometheus-LB-DNS>:9090 in your favourite browser, and you will see it like this
+```
+
+<img width="720" height="172" alt="image" src="https://github.com/user-attachments/assets/5df887a0-ff1f-4be6-9791-db10597e4c82" />
+
+Step 6: Click on Status and select Target. You will see a lot of Targets
+
+<img width="720" height="378" alt="image" src="https://github.com/user-attachments/assets/3a6d4384-da13-4dab-b95e-c98abb13c2ca" />
+
+### We will access your Grafana Dashboard
+
+Step 1: Copy the ALB DNS of Grafana and paste it into your favourite browser. The username will be admin, and the password will be prom-operator for your Grafana LogIn.
+
+<img width="720" height="378" alt="image" src="https://github.com/user-attachments/assets/f8d2bcec-604a-40af-b1d7-d102c36faa4f" />
+
+Step 2: Now, click on Data Source
+
+<img width="720" height="218" alt="image" src="https://github.com/user-attachments/assets/148b1ba0-4bc3-42ec-a45a-e56cc8ce3de4" />
+
+Step 3: Select Prometheus
+
+<img width="720" height="187" alt="image" src="https://github.com/user-attachments/assets/e6ed72b1-755c-4dad-9a3c-a73a7436fdfc" />
+
+Step 4: In the Connection, paste your <Prometheus-LB-DNS>:9090.
+
+<img width="720" height="279" alt="image" src="https://github.com/user-attachments/assets/5c78fc13-e51f-4515-a8a1-9415268947b5" />
+
+Step 5: If the URL is correct, then you will see a green notification. Click on Save & test.
+
+<img width="720" height="364" alt="image" src="https://github.com/user-attachments/assets/0bbbc0c3-0cd5-4f65-abb6-6a44d36f3fd9" />
+
+Step 6: Now, we will create a dashboard to visualise our Kubernetes Cluster Logs. Click on Dashboard.
+
+<img width="720" height="87" alt="image" src="https://github.com/user-attachments/assets/e4aad5f0-6e84-4f03-98cb-fb06b2aa86e4" />
+
+Step 7: Once you click on Dashboard. You will see a lot of Kubernetes components being monitored.
+
+<img width="720" height="366" alt="image" src="https://github.com/user-attachments/assets/7acc006a-b795-47ec-8c3b-7c6e0b4d6d28" />
+
+Step 8: Let’s try to import a type of Kubernetes Dashboard. Click on New and select Import
+
+<img width="720" height="111" alt="image" src="https://github.com/user-attachments/assets/38fd4a51-e5e8-4f3e-913f-242f265ec3c7" />
+
+Step 9: Provide 6417 ID and click on Load
+- Note: 6417 is a unique ID from Grafana, which is used to monitor and visualise Kubernetes Data
+
+<img width="720" height="286" alt="image" src="https://github.com/user-attachments/assets/2380bf9a-4c1e-45e7-95f6-8f96720e5e02" />
+
+Step 10: Select the data source that you have created earlier and click on Import.
+
+<img width="720" height="294" alt="image" src="https://github.com/user-attachments/assets/fa52636c-953f-48bf-98c6-306f8b6fe915" />
+
+Step 11: Here, you go. You can view your Kubernetes Cluster Data. Feel free to explore the other details of the Kubernetes Cluster.
+
+<img width="720" height="366" alt="image" src="https://github.com/user-attachments/assets/f8f2b85b-940f-42e6-868c-ea189763e70a" />
+
 
 ### Conclusion
 - In this comprehensive DevSecOps Kubernetes project, we successfully:
