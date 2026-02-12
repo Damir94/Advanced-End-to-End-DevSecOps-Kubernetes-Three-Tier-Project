@@ -1,6 +1,7 @@
 ## Advanced End-to-End DevSecOps Kubernetes Three-Tier Project using Terraform, AWS EKS, ArgoCD, Prometheus, Grafana, and Jenkins
 
-![project](https://github.com/user-attachments/assets/ef7a0f8c-deea-4453-8897-7663bf4bf44e)
+<img width="1024" height="1536" alt="ChatGPT Image Feb 12, 2026, 11_58_33 AM" src="https://github.com/user-attachments/assets/c8a9a2a4-9fc9-4a5f-b006-610478dc871c" />
+
 
 ## Project Introduction:
 Welcome to the End-to-End DevSecOps Kubernetes Project guide! In this comprehensive project, we will walk through the process of setting up a robust Three-Tier architecture on AWS using Kubernetes, DevOps best practices, and security measures. This project aims to provide hands-on experience in deploying, securing, and monitoring a scalable application environment.
