@@ -1,6 +1,6 @@
 ## Advanced End-to-End DevSecOps Kubernetes Three-Tier Project using Terraform, AWS EKS, ArgoCD, Prometheus, Grafana, and Jenkins
 
-<img width="1024" height="1536" alt="ChatGPT Image Feb 12, 2026, 12_09_59 PM" src="https://github.com/user-attachments/assets/8c8a3b82-5707-43a2-b4b6-6f103676e248" />
+
 
 
 
