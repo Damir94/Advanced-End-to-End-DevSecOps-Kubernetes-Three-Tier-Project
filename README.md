@@ -11,6 +11,26 @@ Before starting the project, ensure you have the following prerequisites:
   - Terraform and AWS CLI are installed on your local machine.
   - Basic familiarity with Kubernetes, Docker, Jenkins, and DevOps principles.
 
+### Why Are We Using Jenkins in This Project?
+Because we want everything to happen automatically, not manually.
+Instead of:
+  - Writing code
+  - Manually building Docker image
+  - Manually scanning for vulnerabilities
+  - Manually pushing to ECR
+  - Manually updating Kubernetes
+Jenkins does all of this for us.
+
+### Role of Jenkins in this DevSecOps Kubernetes Project
+In the diagram, Jenkins sits between:
+  - Source code (GitHub)
+  - Docker
+  - ECR
+  - Security tools
+  - ArgoCD
+Here is exactly what Jenkins does:
+
+
 ## Step 1: We will create our Jenkins Server(EC2) on AWS.
 1. Log in to AWS
   - Go to AWS Management Console
