@@ -35,9 +35,8 @@ In the diagram, Jenkins sits between:
 1. Trigger Pipeline on Code Push
 
 When you push code to GitHub:
-
-➡ Jenkins detects the change
-➡ Pipeline automatically starts
+  ➡ Jenkins detects the change
+  ➡ Pipeline automatically starts
 
 No human intervention needed.
 
@@ -46,6 +45,7 @@ No human intervention needed.
 Jenkins runs tools like: 
   - SonarQube (code quality check)
   - Linting tools
+
 Purpose:
   - Check bad coding practices
   - Detect bugs early
@@ -56,6 +56,7 @@ Jenkins runs:
   - Dependency vulnerability scans
   - File system scans
   - Container scans (like Trivy)
+
 This is the DevSecOps part. Security is checked before deployment.
 
 4. Build Docker Image
@@ -69,6 +70,7 @@ Jenkins:
 Jenkins:
   - Authenticates to AWS
   - Pushes image to ECR private repository
+
 Now the image is stored securely in AWS.
 
 6. Update Kubernetes Deployment File
@@ -76,6 +78,7 @@ Now the image is stored securely in AWS.
 Jenkins updates:
   - Kubernetes manifest
   - Image version tag
+
 Then pushes changes back to GitHub.
 
 7. Trigger ArgoCD Deployment
