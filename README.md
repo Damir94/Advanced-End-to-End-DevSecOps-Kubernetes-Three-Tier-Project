@@ -250,6 +250,85 @@ sudo systemctl status jenkins
 ```
 <img width="1211" height="219" alt="Screenshot 2026-02-08 at 2 04 06 PM" src="https://github.com/user-attachments/assets/b3335cc5-1a8b-4294-827e-26fa4a67541b" />
 
+### Why Do We Install Docker on the Jenkins Server?
+Because Jenkins needs Docker to:
+  - Build container images
+  - Tag images
+  - Push images to ECR
+
+Without Docker installed, Jenkins cannot create container images.
+
+### What Is Docker’s Role in This Project?
+
+- Docker is used to package your application into a container image.
+- Think of Docker like this: It puts your app + dependencies + runtime into one portable box.
+- That box is called a Docker Image.
+
+### Where Docker Fits in Your DevSecOps Flow
+- Your project flow looks like this:
+- Code → Jenkins → Docker → ECR → ArgoCD → Kubernetes
+
+### Here’s what happens step-by-step:
+
+1. Developer Pushes Code
+  - Code goes to GitHub.
+  - Jenkins pipeline starts.
+
+2. Jenkins Runs Security & Quality Checks
+  - Code analysis
+  - Dependency scanning
+  - File scanning
+  - After checks pass…
+
+3. Jenkins Uses Docker to Build Image
+  - Jenkins runs:
+```bash
+docker build -t app:v1 .
+```
+- Docker:
+  - Reads Dockerfile
+  - Builds image
+  - Packages app inside container
+  - Now we have a deployable artifact.
+
+4. Jenkins Pushes Image to ECR
+```bash
+docker push <ecr-repo>
+```
+The image is stored in AWS ECR.
+
+5. Kubernetes Pulls Image
+  - Kubernetes (via ArgoCD) pulls the image from ECR and runs it in pods.
+
+### Why Not Deploy Code Directly?
+
+Because:
+  - Different environments behave differently
+  - “It works on my machine” problem
+  - Hard to scale
+
+Docker solves this:
+  - Same environment everywhere
+  - Portable
+  - Easy to scale in Kubernetes
+  - Faster deployments
+
+### What Happens If Docker Is NOT Installed on Jenkins?
+  - Pipeline fails
+  - Image cannot be built
+  - Nothing to push to ECR
+  - Kubernetes cannot deploy new version
+  - Project stops at CI stage.
+
+### Simple Summary
+Docker’s role in your project:
+  - Package the application
+  - Create immutable image
+  - Ensure consistency
+  - Enable Kubernetes deployment
+
+Jenkins needs Docker because Jenkins is responsible for building that image.
+
 ### Docker Installation Guide (Ubuntu)
 
 Step 1: Update the Package Index
