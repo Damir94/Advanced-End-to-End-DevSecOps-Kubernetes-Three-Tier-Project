@@ -30,6 +30,58 @@ In the diagram, Jenkins sits between:
   - ArgoCD
 Here is exactly what Jenkins does:
 
+1. Trigger Pipeline on Code Push
+
+When you push code to GitHub:
+
+➡ Jenkins detects the change
+➡ Pipeline automatically starts
+
+No human intervention needed.
+
+2. Run Code Quality Analysis
+
+Jenkins runs tools like: 
+  - SonarQube (code quality check)
+  - Linting tools
+Purpose:
+  - Check bad coding practices
+  - Detect bugs early
+
+3. Dependency & Security Check
+
+Jenkins runs:
+  - Dependency vulnerability scans
+  - File system scans
+  - Container scans (like Trivy)
+This is the DevSecOps part. Security is checked before deployment.
+
+4. Build Docker Image
+
+Jenkins:
+  - Builds Docker image
+  - Tags the image (ex: v1.0.3)
+
+5. Push Image to ECR
+
+Jenkins:
+  - Authenticates to AWS
+  - Pushes image to ECR private repository
+Now the image is stored securely in AWS.
+
+6. Update Kubernetes Deployment File
+
+Jenkins updates:
+  - Kubernetes manifest
+  - Image version tag
+Then pushes changes back to GitHub.
+
+7. Trigger ArgoCD Deployment
+  - Argo CD watches GitHub.
+
+When Jenkins updates the deployment file:
+  ➡ ArgoCD detects change
+  ➡ Automatically deploys new version to Kubernetes
 
 ## Step 1: We will create our Jenkins Server(EC2) on AWS.
 1. Log in to AWS
