@@ -29,7 +29,8 @@ In the diagram, Jenkins sits between:
   - ECR
   - Security tools
   - ArgoCD
-Here is exactly what Jenkins does:
+
+### Here is exactly what Jenkins does:
 
 1. Trigger Pipeline on Code Push
 
