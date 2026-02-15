@@ -483,7 +483,85 @@ This is cost-effective and simple.
 docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
 ```
 
-### AWS CLI is installed
+### Why Do We Install AWS CLI on the Jenkins Server?
+- Because Jenkins needs a way to talk to AWS.
+- The tool that allows this communication is:
+    - AWS Command Line Interface
+    - AWS CLI lets Jenkins run AWS commands directly from the terminal or pipeline script.
+
+### What Is the Role of AWS CLI in This DevSecOps Kubernetes Project?
+- In our project: Code → Jenkins → Docker → ECR → EKS → ArgoCD → Kubernetes
+- Jenkins needs to interact with AWS services like:
+  - ECR (Elastic Container Registry)
+  - EKS (Elastic Kubernetes Service)
+  - IAM
+  - STS
+- AWS CLI makes this possible.
+
+### What Jenkins Uses AWS CLI For
+- Here’s exactly what happens:
+
+1. Authenticate to ECR
+- Before pushing Docker image, Jenkins runs:
+```bash
+aws ecr get-login-password
+```
+- This allows Docker to log in to ECR securely.
+- Without AWS CLI → Docker cannot authenticate → push fails.
+
+2. Push Docker Image to ECR
+- After login, Jenkins pushes image.
+- AWS CLI helps retrieve repository info and credentials.
+
+3. Update kubeconfig for EKS
+- To allow kubectl to talk to EKS cluster, Jenkins runs:
+```css
+aws eks update-kubeconfig --region us-east-1 --name my-cluster
+```
+- This connects Jenkins to your Kubernetes cluster.
+- Without this → kubectl cannot access EKS.
+
+4. Retrieve AWS Information
+- Jenkins may use AWS CLI to:
+  - Describe cluster
+  - Get account ID
+  - Get region info
+  - Verify credentials
+Example:
+```sql
+aws sts get-caller-identity
+```
+
+### Why Not Do Everything Manually?
+- Because this is CI/CD automation.
+- We want:
+  - Automatic deployments
+  - No manual AWS console clicks
+  - Fully automated pipeline
+- AWS CLI enables automation.
+
+### What Happens If AWS CLI Is NOT Installed?
+- Cannot log in to ECR
+- Cannot update kubeconfig
+- Cannot communicate with EKS
+- Pipeline fails
+- Your CI/CD breaks at AWS interaction stage.
+
+### Important: How AWS CLI Gets Permissions
+- Since you attached an IAM Role to Jenkins EC2:
+- AWS CLI automatically uses temporary credentials from the EC2 instance role.
+- No need to store access keys.
+- This is secure.
+
+### Simple Summary
+- AWS CLI’s role in your project:
+  - Authenticate to AWS services
+  - Push Docker images to ECR
+  - Connect to EKS cluster
+  - Automate AWS operations
+- Jenkins installs AWS CLI so it can control AWS programmatically inside the pipeline.is installed
+
+### Install AWS CLI 
 Step 1: Update your system
 ```bash
 sudp apt update
