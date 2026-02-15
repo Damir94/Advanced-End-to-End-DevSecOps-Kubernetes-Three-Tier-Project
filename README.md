@@ -120,7 +120,7 @@ When Jenkins updates the deployment file:
       - Allow SSH (22) → Source: My IP
       - Allow HTTP (80) if you want a web server
       - Allow Custom TCP (8080) port for Jenkins server
-      - Alow Custom TCP (9000) port Sonarqube
+      - Allow Custom TCP (9000) port Sonarqube
 7. Storage
   - Make it 30G
 
