@@ -376,6 +376,108 @@ sudo usermod -aG docker ubuntu
 ```
 Important: Log out and log back in for the group changes to take effect. After re-login, you should be able to run Docker commands without sudo.
 
+### Why Do We Need SonarQube?
+- SonarQube is used to check the quality and security of source code before deployment.
+- In DevSecOps, we don’t just deploy code.
+- We make sure the code is:
+  - Clean
+  - Secure
+  - Maintainable
+  - Free of major bugs
+  - That’s where SonarQube comes in.
+
+### What Is the Role of SonarQube in Our Project?
+- In your End-to-End DevSecOps Kubernetes pipeline: Code → Jenkins → SonarQube → Docker → ECR → ArgoCD → Kubernetes
+- SonarQube runs during the CI stage
+
+### What SonarQube Checks
+- When Jenkins triggers the pipeline:
+- SonarQube scans the code for:
+
+1. Bugs
+  - Logic mistakes that may break the application.
+
+2. Vulnerabilities
+  - Security issues like:
+  - SQL injection risk
+  - Hardcoded passwords
+  - Unsafe code patterns
+
+3. Code Smells
+  - Bad coding practices (not clean or maintainable).
+
+4. Code Coverage
+- How much of your code is tested.
+
+### Why Is This Important in DevSecOps?
+- DevSecOps means: Security + DevOps together.
+- Instead of finding security problems in production…
+  - We detect them early in CI
+  - We fail the build if quality is bad
+  - We prevent insecure deployments
+
+This saves money and prevents production incidents.
+
+### What Happens If We Don’t Use SonarQube?
+- Poor quality code goes to production
+- Security vulnerabilities may be deployed
+- Technical debt increases
+- Harder to maintain later
+
+### Why Are We Running SonarQube as a Docker Container on Jenkins Server?
+- There are 3 main reasons:
+
+1. Easy Installation
+- Instead of:
+  - Downloading SonarQube manually
+  - Installing Java
+  - Configuring services
+
+We just run:
+```bash
+docker run -d -p 9000:9000 sonarqube
+```
+
+2. Isolation
+- Running SonarQube in Docker:
+  - Keeps it isolated from Jenkins
+  - Avoids dependency conflicts
+  - Easy to remove or restart
+
+3. Lightweight for Learning Projects
+- In small DevSecOps projects:
+   - Jenkins runs on EC2
+   - SonarQube runs as container on same EC2
+This is cost-effective and simple.
+
+### How Jenkins Connects to SonarQube
+- Jenkins sends source code to SonarQube
+- SonarQube analyzes code
+- It returns a Quality Gate result
+- If Quality Gate fails → Jenkins pipeline stops
+- If passes → Continue to Docker build
+
+## What Is Quality Gate?
+- Quality Gate = pass or fail rule.
+- Example:
+  - No critical vulnerabilities
+  - Code coverage above 70%
+  - No blocker bugs
+  - If rules fail → build fails.
+
+### Simple Summary
+- SonarQube’s role:
+  - Analyze code quality
+  - Detect security issues
+  - Enforce quality gate
+  - Prevent bad code from reaching Kubernetes
+
+- We run it in Docker on Jenkins server because:
+  - Easy setup
+  - Isolated
+  - Fast deployment
+  - Good for small project environments
+
 ## Run Docker Container of Sonarqube
 ```bash
 docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
