@@ -130,6 +130,61 @@ When Jenkins updates the deployment file:
 
 <img width="1555" height="257" alt="Screenshot 2026-02-07 at 12 23 28 PM" src="https://github.com/user-attachments/assets/c550c483-b895-4c04-92fb-b1dec90fe37a" />
 
+### Why Do We Attach an IAM Role to Jenkins EC2?
+
+When Jenkins runs on an EC2 server, it needs to:
+  - Push Docker images to ECR
+  - Create or update EKS resources
+  - Access S3 (if used)
+  - Describe clusters
+  - Authenticate with AWS
+
+- But AWS does not allow any machine to access services without permission.
+- So we attach an IAM Role to the EC2 instance.
+
+### What Is an IAM Role?
+  - An IAM role is like a temporary permission badge for AWS services.
+  - Instead of storing AWS access keys inside Jenkins (which is insecure), we attach a role to EC2.
+  - Then Jenkins automatically gets permissions securely.
+
+### Why AdministratorAccess?
+During project setup (especially lab or learning project), people attach: AdministratorAccess
+
+Because:
+  - It gives full access to all AWS services
+  - It avoids permission errors
+  - It makes setup easier
+  - Faster for demo / bootcamp projects
+
+### What Jenkins Actually Needs Access To
+In our DevSecOps Kubernetes project, Jenkins needs permission to:
+  - ECR → push images
+  - EKS → describe cluster
+  - IAM → maybe assume roles
+  - EC2 → describe instances
+  - STS → get authentication tokens
+
+- Is AdministratorAccess Recommended in Real Production? No.
+- In real production: You should follow the Least Privilege Principle.
+
+- That means: Only give permissions Jenkins truly needs. Example:
+  - AmazonEC2ContainerRegistryFullAccess
+  - AmazonEKSClusterPolicy
+  - Custom IAM policy with limited actions
+
+### Why Not Use Access Keys Instead?
+
+Bad practice:
+  - Storing AWS keys in Jenkins
+  - Risk of leaks
+  - Hard to rotate
+  - Security issue
+
+Best practice:
+  - Attach IAM role to EC2
+  - Jenkins automatically uses temporary credential
+  - This is more secure.
+
 ### Create an IAM Role
   - Go to IAM → Roles → Create role
   - Trusted entity:
