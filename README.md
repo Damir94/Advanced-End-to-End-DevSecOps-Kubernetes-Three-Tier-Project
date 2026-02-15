@@ -35,8 +35,9 @@ In the diagram, Jenkins sits between:
 1. Trigger Pipeline on Code Push
 
 When you push code to GitHub:
-  ➡ Jenkins detects the change
-  ➡ Pipeline automatically starts
+
+- Jenkins detects the chang
+- Pipeline automatically starts
 
 No human intervention needed.
 
@@ -85,8 +86,8 @@ Then pushes changes back to GitHub.
   - Argo CD watches GitHub.
 
 When Jenkins updates the deployment file:
-  ➡ ArgoCD detects change
-  ➡ Automatically deploys new version to Kubernetes
+  - ArgoCD detects change
+  - Automatically deploys new version to Kubernetes
 
 ## Step 1: We will create our Jenkins Server(EC2) on AWS.
 1. Log in to AWS
