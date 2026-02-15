@@ -19,6 +19,7 @@ Instead of:
   - Manually scanning for vulnerabilities
   - Manually pushing to ECR
   - Manually updating Kubernetes
+
 Jenkins does all of this for us.
 
 ### Role of Jenkins in this DevSecOps Kubernetes Project
