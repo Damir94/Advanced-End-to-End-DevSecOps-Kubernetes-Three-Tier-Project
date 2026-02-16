@@ -662,6 +662,62 @@ Step 5: Verify installation
 ```bash
 eksctl version
 ```
+### What Is kubectl?
+- kubectl is the command-line tool used to communicate with a Kubernetes cluster.
+- Think of it like: A remote control for Kubernetes.
+- It works with: Kubernetes
+
+### Why Do We Install kubectl on the Jenkins Server?
+- Because Jenkins needs a way to:
+  - Deploy applications to EKS
+  - Apply Kubernetes manifests
+  - Check pod status
+  - Verify deployments
+  - Rollout new versions
+- Without kubectl, Jenkins cannot talk to the Kubernetes cluster.
+
+### Role of kubectl in Our DevSecOps Project
+- Your project flow: Code → Jenkins → Docker → ECR → EKS → Kubernetes
+- kubectl is used after the Docker image is pushed to ECR.
+
+### What Jenkins Uses kubectl For
+1. Connect to EKS
+- First Jenkins runs: aws eks update-kubeconfig ..
+- This configures access to the cluster.
+- Now kubectl can communicate with EKS.
+
+2. Deploy Application
+- Jenkins can run: kubectl apply -f deployment.yaml
+- This deploys your application into the cluster.
+
+3. Verify Deployment
+- Jenkins can check: kubectl get pods, kubectl get svc, kubectl rollout status deployment/app
+- This confirms that the deployment succeeded.
+
+4. Troubleshooting (Optional)
+- If deployment fails, Jenkins can: Get logs, Describe pods, Check events.
+
+### If We Are Using ArgoCD, Do We Still Need kubectl?
+- If your project uses: Argo CD
+- Then:
+  - Jenkins builds image
+  - Updates Git repo
+  - ArgoCD deploys automatically
+- In that case:
+  - kubectl may only be used for:
+    - Initial cluster setup
+    - Installing ArgoCD
+    - Verification
+    - Manual debugging
+- In pure GitOps, Jenkins does NOT deploy directly using kubectl.
+- ArgoCD handles deployment.
+
+### What Happens If kubectl Is NOT Installed?
+- If your pipeline uses kubectl commands:
+  - Jenkins cannot deploy
+  - Cannot check pods
+  - Cannot validate cluster status
+  - Deployment automation fails
 
 ### Kubernetes CLI (kubectl) Installation
 Step 1: Download kubectl Binary and Checksum
