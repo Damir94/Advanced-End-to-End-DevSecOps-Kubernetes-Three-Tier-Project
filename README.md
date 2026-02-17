@@ -826,6 +826,90 @@ terraform --version
 ```
 <img width="525" height="96" alt="image" src="https://github.com/user-attachments/assets/ad84684d-6a60-43e6-90ac-bdbbdc7fe069" />
 
+### What Is Trivy?
+- Trivy is a security scanning tool.
+- It checks for:
+  - Vulnerabilities in Docker images
+  - Vulnerabilities in dependencies
+  - OS package security issues
+  - Misconfigurations
+- Think of Trivy like a security guard in your CI/CD pipeline.
+
+### Why Do We Install Trivy on the Jenkins Server?
+- Because Jenkins is running the pipeline.
+- If we want automatic security checks, Jenkins must be able to run:
+```arduino
+trivy image myapp:latest
+```
+- Without installing Trivy on Jenkins:
+  - No container security scan
+  - No vulnerability detection
+  - Security risks go to production
+
+### Role of Trivy in Your DevSecOps Kubernetes Project
+- Our pipeline looks like: Code → Jenkins → SonarQube → Docker → Trivy → ECR → ArgoCD → Kubernetes
+- Trivy runs after Docker builds the image.
+
+### What Trivy Scans
+1. Docker Image Scan
+- After Jenkins builds image:
+```nginx
+docker build -t app:v1 .
+```
+- Jenkins runs:
+```arduino
+trivy image app:v1
+```
+- Trivy checks:
+  - OS vulnerabilities (Alpine, Ubuntu, etc.)
+  - Installed packages
+  - CVEs (Common Vulnerabilities and Exposures)
+  
+2. Filesystem Scan (Optional)
+```nginx
+trivy fs .
+```
+Scans project files for vulnerabilities.
+
+3. Dependency Scan
+- Checks third-party libraries:
+  - npm packages
+  - pip packages
+  - Maven dependencies
+
+### Why Is This Important?
+- Because even if:
+  - Your code is clean
+  - SonarQube passes
+- Your base Docker image might contain vulnerabilities.
+- Example: You use:
+```css
+FROM ubuntu:latest
+```
+- If Ubuntu has a critical CVE → your container is vulnerable.
+- Trivy catches this before deployment.
+
+### What Happens If Trivy Finds Critical Vulnerabilities?
+- You can configure Jenkins to:
+  - Fail the pipeline
+  - Stop deployment
+  - Alert the team
+- This prevents insecure images from reaching Kubernetes.
+
+### Why Install Trivy on Jenkins Instead of Somewhere Else?
+- Because:
+  - We want security scan inside CI pipeline
+  - Automatic scanning
+  - No manual security checks
+  - Every build is verified
+- Jenkins is the CI engine, so Trivy runs there.
+
+### What Happens If We Don’t Use Trivy?
+- Vulnerable images get deployed
+- Security risks in production
+- Possible data breach
+- Compliance issues
+
 ### Install Trivy using official repo
 Step 1: Update system
 ```bash
