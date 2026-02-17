@@ -735,6 +735,65 @@ kubectl version --client
 ```
 <img width="585" height="98" alt="Screenshot 2026-01-13 at 11 38 09 AM" src="https://github.com/user-attachments/assets/b4035a28-99db-48fa-aabc-9e3e890c9354" />
 
+### What Is Terraform?
+- Terraform is a tool used to create and manage infrastructure using code.
+- Instead of clicking in AWS Console…
+- We write code like:
+  - VPC
+  - Subnets
+  - EKS cluster
+  - Security groups
+  - IAM roles
+- And Terraform creates them automatically.
+
+### Why Do We Install Terraform on the Jenkins Server?
+- Because Jenkins is our automation engine.
+- If we want infrastructure to be:
+  - Automated
+  - Repeatable
+  - Version-controlled
+  - Created from pipeline
+- Then Jenkins must run Terraform commands.
+- Without Terraform installed, Jenkins cannot create AWS infrastructure.
+
+### Role of Terraform in Our DevSecOps Kubernetes Project
+- In our project:
+  - Infrastructure Stage → Application Stage
+  - Terraform handles the infrastructure stage.
+
+### What Terraform Creates
+- In our EKS DevSecOps project, Terraform typically creates:
+  - VPC
+  - Public & private subnets
+  - Internet gateway
+  - Route tables
+  - Security groups
+  - IAM roles
+  - EKS cluster
+  - Node groups
+- All written in .tf files.
+
+### How Jenkins Uses Terraform
+- Inside the Jenkins pipeline: terraform init, terraform plan, terraform apply -auto-approve
+- After infrastructure is ready:
+  - Jenkins builds Docker image
+  - Pushes to ECR
+  - ArgoCD deploys to EKS
+
+### Why Not Create Infrastructure Manually?
+- Because manual setup is:
+  - Slow
+  - Error-prone
+  - Not repeatable
+  - Not version-controlled
+
+### What Happens If Terraform Is NOT Installed?
+- If your pipeline includes Terraform stage:
+  - Jenkins cannot create EKS cluster
+  - Cannot create VPC
+  - Infrastructure provisioning fails
+  - Whole pipeline breaks
+
 ### Terraform Installation
 Step 1: Install Required Packages
 ```bash
