@@ -968,7 +968,7 @@ Step 3: Verify installation
 helm version
 ```
 
-### Step 3: Configure the Jenkins
+### Configure the Jenkins
 - We logged into our Jenkins server.
 
 - Now, we have to configure Jenkins. So, copy the public IP of your Jenkins Server and paste it into your favourite browser on port 8080.
@@ -991,7 +991,7 @@ helm version
 
 <img width="1594" height="541" alt="Screenshot 2026-01-30 at 11 00 58 AM" src="https://github.com/user-attachments/assets/b0da7b80-71bd-4781-91a7-47c5534642e9" />
 
-### Step 5: We will deploy the EKS Cluster using the eksctl commands
+### We will deploy the EKS Cluster using the eksctl commands
 Now, go back to your Jenkins Server terminal and configure the AWS.
 ```bash
 aws configure
