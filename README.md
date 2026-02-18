@@ -937,6 +937,22 @@ Step 6: Verify installation
 ```bash
 trivy --version
 ```
+### What Is Helm?
+- Helm is a package manager for: Kubernetes
+- Think of Helm like:
+  - apt for Ubuntu
+  - npm for Node.js
+  - yum for Linux
+- But for Kubernetes applications.
+
+### Why Do We Install Helm on the Jenkins Server?
+- Because Jenkins needs a way to:
+  - Install complex applications into Kubernetes
+  - Deploy applications using templates
+  - Manage versions of deployments
+  - Upgrade or rollback releases
+- Without Helm, Jenkins would need to manually apply many YAML files.
+- Helm makes it easier and cleaner.
 
 ### helm is installed
 Step 1: Update system
