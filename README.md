@@ -1029,9 +1029,15 @@ Select the Available plugins, install the following plugins and click on Install
 - The Credentials will look like the snippet below.
 <img width="1600" height="288" alt="image" src="https://github.com/user-attachments/assets/e7bed2eb-323b-4d8e-92d9-76599fbf27c7" />
 
-- Now, we need to add GitHub credentials as well because currently, my repository is Private.
-- This thing, I am performing this because in Industry Projects, your repository will be private.
-- So, add the username and personal access token of your GitHub account.
+### We have to set our GitHub credentials on Jenkins
+- Go to Manage Plugins and click on Credentials
+- Click on global
+- Select Username with password as Kind
+- Add username and personal access token of your Github account
+- Add ID
+- Click on Create.
+- The Credentials will look like the snippet below.
+
 <img width="1600" height="680" alt="image" src="https://github.com/user-attachments/assets/cff93a30-ac62-428f-8d1e-73341ea41bcf" />
 
 - Both credentials will look like this.
