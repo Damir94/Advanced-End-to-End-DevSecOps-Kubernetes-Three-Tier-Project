@@ -991,13 +991,21 @@ helm version
 
 <img width="1594" height="541" alt="Screenshot 2026-01-30 at 11 00 58 AM" src="https://github.com/user-attachments/assets/b0da7b80-71bd-4781-91a7-47c5534642e9" />
 
-### We will deploy the EKS Cluster using the eksctl commands
-Now, go back to your Jenkins Server terminal and configure the AWS.
-```bash
-aws configure
-```
-  - Go to Manage Jenkins
-  - Click on Plugins
+### We will deploy the EKS Cluster using Jenkins' pipeline so we need to install some AWS plugins in Jenkins first. 
+
+- Why Do We Install AWS Plugins in Jenkins?
+    - Jenkins by default does NOT understand AWS.
+    - It cannot:
+      - Authenticate to AWS easily
+      - Assume IAM roles
+      - Run AWS operations safely inside pipeline
+- So we install plugins like:
+    - AWS Credentials Plugin
+    - Pipeline: AWS Steps Plugin
+- These extend Jenkins functionality.
+
+Step 1: Go to Manage Jenkins
+- Click on Plugins
 <img width="1577" height="381" alt="Screenshot 2026-01-30 at 11 03 23 AM" src="https://github.com/user-attachments/assets/dd08a6cb-a656-47f5-af36-44a438ebc24f" />
 
 Select the Available plugins, install the following plugins and click on Install
