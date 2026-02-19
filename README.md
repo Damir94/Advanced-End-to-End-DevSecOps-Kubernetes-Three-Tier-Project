@@ -213,7 +213,6 @@ Important: Log out and log back in for the group changes to take effect. After r
   - That’s where SonarQube comes in.
 
 ### Why Are We Running SonarQube as a Docker Container on Jenkins Server?
-- There are 3 main reasons:
 
 1. Easy Installation
 - Instead of:
