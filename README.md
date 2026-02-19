@@ -258,77 +258,6 @@ Because Jenkins needs Docker to:
 
 Without Docker installed, Jenkins cannot create container images.
 
-### What Is Docker’s Role in This Project?
-
-- Docker is used to package your application into a container image.
-- Think of Docker like this: It puts your app + dependencies + runtime into one portable box.
-- That box is called a Docker Image.
-
-### Where Docker Fits in Your DevSecOps Flow
-- Your project flow looks like this:
-- Code → Jenkins → Docker → ECR → ArgoCD → Kubernetes
-
-### Here’s what happens step-by-step:
-
-1. Developer Pushes Code
-  - Code goes to GitHub.
-  - Jenkins pipeline starts.
-
-2. Jenkins Runs Security & Quality Checks
-  - Code analysis
-  - Dependency scanning
-  - File scanning
-  - After checks pass…
-
-3. Jenkins Uses Docker to Build Image
-  - Jenkins runs:
-```bash
-docker build -t app:v1 .
-```
-- Docker:
-  - Reads Dockerfile
-  - Builds image
-  - Packages app inside container
-  - Now we have a deployable artifact.
-
-4. Jenkins Pushes Image to ECR
-```bash
-docker push <ecr-repo>
-```
-The image is stored in AWS ECR.
-
-5. Kubernetes Pulls Image
-  - Kubernetes (via ArgoCD) pulls the image from ECR and runs it in pods.
-
-### Why Not Deploy Code Directly?
-
-Because:
-  - Different environments behave differently
-  - “It works on my machine” problem
-  - Hard to scale
-
-Docker solves this:
-  - Same environment everywhere
-  - Portable
-  - Easy to scale in Kubernetes
-  - Faster deployments
-
-### What Happens If Docker Is NOT Installed on Jenkins?
-  - Pipeline fails
-  - Image cannot be built
-  - Nothing to push to ECR
-  - Kubernetes cannot deploy new version
-  - Project stops at CI stage.
-
-### Simple Summary
-Docker’s role in your project:
-  - Package the application
-  - Create immutable image
-  - Ensure consistency
-  - Enable Kubernetes deployment
-
-Jenkins needs Docker because Jenkins is responsible for building that image.
-
 ### Docker Installation Guide (Ubuntu)
 
 Step 1: Update the Package Index
@@ -386,44 +315,6 @@ Important: Log out and log back in for the group changes to take effect. After r
   - Free of major bugs
   - That’s where SonarQube comes in.
 
-### What Is the Role of SonarQube in Our Project?
-- In your End-to-End DevSecOps Kubernetes pipeline: Code → Jenkins → SonarQube → Docker → ECR → ArgoCD → Kubernetes
-- SonarQube runs during the CI stage
-
-### What SonarQube Checks
-- When Jenkins triggers the pipeline:
-- SonarQube scans the code for:
-
-1. Bugs
-  - Logic mistakes that may break the application.
-
-2. Vulnerabilities
-  - Security issues like:
-  - SQL injection risk
-  - Hardcoded passwords
-  - Unsafe code patterns
-
-3. Code Smells
-  - Bad coding practices (not clean or maintainable).
-
-4. Code Coverage
-- How much of your code is tested.
-
-### Why Is This Important in DevSecOps?
-- DevSecOps means: Security + DevOps together.
-- Instead of finding security problems in production…
-  - We detect them early in CI
-  - We fail the build if quality is bad
-  - We prevent insecure deployments
-
-This saves money and prevents production incidents.
-
-### What Happens If We Don’t Use SonarQube?
-- Poor quality code goes to production
-- Security vulnerabilities may be deployed
-- Technical debt increases
-- Harder to maintain later
-
 ### Why Are We Running SonarQube as a Docker Container on Jenkins Server?
 - There are 3 main reasons:
 
@@ -433,50 +324,11 @@ This saves money and prevents production incidents.
   - Installing Java
   - Configuring services
 
-We just run:
-```bash
-docker run -d -p 9000:9000 sonarqube
-```
-
 2. Isolation
 - Running SonarQube in Docker:
   - Keeps it isolated from Jenkins
   - Avoids dependency conflicts
   - Easy to remove or restart
-
-3. Lightweight for Learning Projects
-- In small DevSecOps projects:
-   - Jenkins runs on EC2
-   - SonarQube runs as container on same EC2
-This is cost-effective and simple.
-
-### How Jenkins Connects to SonarQube
-- Jenkins sends source code to SonarQube
-- SonarQube analyzes code
-- It returns a Quality Gate result
-- If Quality Gate fails → Jenkins pipeline stops
-- If passes → Continue to Docker build
-
-## What Is Quality Gate?
-- Quality Gate = pass or fail rule.
-- Example:
-  - No critical vulnerabilities
-  - Code coverage above 70%
-  - No blocker bugs
-  - If rules fail → build fails.
-
-### Simple Summary
-- SonarQube’s role:
-  - Analyze code quality
-  - Detect security issues
-  - Enforce quality gate
-  - Prevent bad code from reaching Kubernetes
-
-- We run it in Docker on Jenkins server because:
-  - Easy setup
-  - Isolated
-  - Fast deployment
-  - Good for small project environments
 
 ## Run Docker Container of Sonarqube
 ```bash
@@ -488,78 +340,6 @@ docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
 - The tool that allows this communication is:
     - AWS Command Line Interface
     - AWS CLI lets Jenkins run AWS commands directly from the terminal or pipeline script.
-
-### What Is the Role of AWS CLI in This DevSecOps Kubernetes Project?
-- In our project: Code → Jenkins → Docker → ECR → EKS → ArgoCD → Kubernetes
-- Jenkins needs to interact with AWS services like:
-  - ECR (Elastic Container Registry)
-  - EKS (Elastic Kubernetes Service)
-  - IAM
-  - STS
-- AWS CLI makes this possible.
-
-### What Jenkins Uses AWS CLI For
-- Here’s exactly what happens:
-
-1. Authenticate to ECR
-- Before pushing Docker image, Jenkins runs:
-```bash
-aws ecr get-login-password
-```
-- This allows Docker to log in to ECR securely.
-- Without AWS CLI → Docker cannot authenticate → push fails.
-
-2. Push Docker Image to ECR
-- After login, Jenkins pushes image.
-- AWS CLI helps retrieve repository info and credentials.
-
-3. Update kubeconfig for EKS
-- To allow kubectl to talk to EKS cluster, Jenkins runs:
-```css
-aws eks update-kubeconfig --region us-east-1 --name my-cluster
-```
-- This connects Jenkins to your Kubernetes cluster.
-- Without this → kubectl cannot access EKS.
-
-4. Retrieve AWS Information
-- Jenkins may use AWS CLI to:
-  - Describe cluster
-  - Get account ID
-  - Get region info
-  - Verify credentials
-Example:
-```sql
-aws sts get-caller-identity
-```
-
-### Why Not Do Everything Manually?
-- Because this is CI/CD automation.
-- We want:
-  - Automatic deployments
-  - No manual AWS console clicks
-  - Fully automated pipeline
-- AWS CLI enables automation.
-
-### What Happens If AWS CLI Is NOT Installed?
-- Cannot log in to ECR
-- Cannot update kubeconfig
-- Cannot communicate with EKS
-- Pipeline fails
-- Your CI/CD breaks at AWS interaction stage.
-
-### Important: How AWS CLI Gets Permissions
-- Since you attached an IAM Role to Jenkins EC2:
-- AWS CLI automatically uses temporary credentials from the EC2 instance role.
-- No need to store access keys.
-- This is secure.
-
-### Simple Summary
-- AWS CLI’s role in your project:
-  - Authenticate to AWS services
-  - Push Docker images to ECR
-  - Connect to EKS cluster
-  - Automate AWS operations
-- Jenkins installs AWS CLI so it can control AWS programmatically inside the pipeline.is installed
 
 ### Install AWS CLI 
 Step 1: Update your system
@@ -583,11 +363,6 @@ Step 5: Verify Installation
 aws --version
 ```
 
-## What Is eksctl?
-- eksctl is a command-line tool used to create and manage Amazon EKS clusters easily.
-- Think of it like: A shortcut tool to create and manage EKS without writing everything manually.
-- It works specifically with: Amazon EKS
-
 ### Why Do We Install eksctl on the Jenkins Server?
 - Because Jenkins needs a way to:
   - Create EKS cluster
@@ -595,51 +370,8 @@ aws --version
   - Manage IAM roles for EKS
   - Delete cluster (if needed)
   - Automate cluster provisioning
-- Instead of manually creating EKS from AWS Console, Jenkins can run:
-```bash
-eksctl create cluster ...
-```
+- Instead of manually creating EKS from AWS Console.
 - Fully automated
-
-### What Is the Role of eksctl in Your DevSecOps Project?
-- There are two possible scenarios:
-
-Scenario 1: You Use eksctl to Create the Cluster
-- In many bootcamp projects:
-- Jenkins uses eksctl to:
-  - Create EKS cluster
-  - Create worker nodes
-  - Configure IAM roles
-  - Attach OIDC provider
-- This makes cluster setup simple and fast.
-
-Scenario 2: You Use Terraform for Infrastructure
-- If your project already creates EKS using Terraform:
-- Then eksctl might only be used for:
-  - Managing node groups
-  - Testing cluster creation manually
-  - Quick cluster setup in labs
-- In real production, usually:
-  - Terraform OR CloudFormation handles infrastructure
-  - eksctl is used more for quick setups
-
-### Why Not Create EKS Manually in Console?
-- Because this is DevOps.
-- We want:
-  - Automation
-  - Repeatability
-  - No manual clicks
-  - Infrastructure as Code
-- eksctl allows automation from Jenkins.
-
-### What Happens If eksctl Is NOT Installed?
-- If your pipeline uses eksctl commands:
-  - Cluster cannot be created
-  - Node groups cannot be added
-  - Automation fails
-- But…
-  - If you are using Terraform for cluster creation
-  - you technically don’t need eksctl in Jenkins.
 
 ### eksctl is installed: eksctl version
 Step 1: Install
@@ -662,10 +394,6 @@ Step 5: Verify installation
 ```bash
 eksctl version
 ```
-### What Is kubectl?
-- kubectl is the command-line tool used to communicate with a Kubernetes cluster.
-- Think of it like: A remote control for Kubernetes.
-- It works with: Kubernetes
 
 ### Why Do We Install kubectl on the Jenkins Server?
 - Because Jenkins needs a way to:
@@ -675,49 +403,6 @@ eksctl version
   - Verify deployments
   - Rollout new versions
 - Without kubectl, Jenkins cannot talk to the Kubernetes cluster.
-
-### Role of kubectl in Our DevSecOps Project
-- Your project flow: Code → Jenkins → Docker → ECR → EKS → Kubernetes
-- kubectl is used after the Docker image is pushed to ECR.
-
-### What Jenkins Uses kubectl For
-1. Connect to EKS
-- First Jenkins runs: aws eks update-kubeconfig ..
-- This configures access to the cluster.
-- Now kubectl can communicate with EKS.
-
-2. Deploy Application
-- Jenkins can run: kubectl apply -f deployment.yaml
-- This deploys your application into the cluster.
-
-3. Verify Deployment
-- Jenkins can check: kubectl get pods, kubectl get svc, kubectl rollout status deployment/app
-- This confirms that the deployment succeeded.
-
-4. Troubleshooting (Optional)
-- If deployment fails, Jenkins can: Get logs, Describe pods, Check events.
-
-### If We Are Using ArgoCD, Do We Still Need kubectl?
-- If your project uses: Argo CD
-- Then:
-  - Jenkins builds image
-  - Updates Git repo
-  - ArgoCD deploys automatically
-- In that case:
-  - kubectl may only be used for:
-    - Initial cluster setup
-    - Installing ArgoCD
-    - Verification
-    - Manual debugging
-- In pure GitOps, Jenkins does NOT deploy directly using kubectl.
-- ArgoCD handles deployment.
-
-### What Happens If kubectl Is NOT Installed?
-- If your pipeline uses kubectl commands:
-  - Jenkins cannot deploy
-  - Cannot check pods
-  - Cannot validate cluster status
-  - Deployment automation fails
 
 ### Kubernetes CLI (kubectl) Installation
 Step 1: Download kubectl Binary and Checksum
@@ -735,17 +420,6 @@ kubectl version --client
 ```
 <img width="585" height="98" alt="Screenshot 2026-01-13 at 11 38 09 AM" src="https://github.com/user-attachments/assets/b4035a28-99db-48fa-aabc-9e3e890c9354" />
 
-### What Is Terraform?
-- Terraform is a tool used to create and manage infrastructure using code.
-- Instead of clicking in AWS Console…
-- We write code like:
-  - VPC
-  - Subnets
-  - EKS cluster
-  - Security groups
-  - IAM roles
-- And Terraform creates them automatically.
-
 ### Why Do We Install Terraform on the Jenkins Server?
 - Because Jenkins is our automation engine.
 - If we want infrastructure to be:
@@ -755,44 +429,6 @@ kubectl version --client
   - Created from pipeline
 - Then Jenkins must run Terraform commands.
 - Without Terraform installed, Jenkins cannot create AWS infrastructure.
-
-### Role of Terraform in Our DevSecOps Kubernetes Project
-- In our project:
-  - Infrastructure Stage → Application Stage
-  - Terraform handles the infrastructure stage.
-
-### What Terraform Creates
-- In our EKS DevSecOps project, Terraform typically creates:
-  - VPC
-  - Public & private subnets
-  - Internet gateway
-  - Route tables
-  - Security groups
-  - IAM roles
-  - EKS cluster
-  - Node groups
-- All written in .tf files.
-
-### How Jenkins Uses Terraform
-- Inside the Jenkins pipeline: terraform init, terraform plan, terraform apply -auto-approve
-- After infrastructure is ready:
-  - Jenkins builds Docker image
-  - Pushes to ECR
-  - ArgoCD deploys to EKS
-
-### Why Not Create Infrastructure Manually?
-- Because manual setup is:
-  - Slow
-  - Error-prone
-  - Not repeatable
-  - Not version-controlled
-
-### What Happens If Terraform Is NOT Installed?
-- If your pipeline includes Terraform stage:
-  - Jenkins cannot create EKS cluster
-  - Cannot create VPC
-  - Infrastructure provisioning fails
-  - Whole pipeline breaks
 
 ### Terraform Installation
 Step 1: Install Required Packages
@@ -835,81 +471,6 @@ terraform --version
   - Misconfigurations
 - Think of Trivy like a security guard in your CI/CD pipeline.
 
-### Why Do We Install Trivy on the Jenkins Server?
-- Because Jenkins is running the pipeline.
-- If we want automatic security checks, Jenkins must be able to run:
-```arduino
-trivy image myapp:latest
-```
-- Without installing Trivy on Jenkins:
-  - No container security scan
-  - No vulnerability detection
-  - Security risks go to production
-
-### Role of Trivy in Your DevSecOps Kubernetes Project
-- Our pipeline looks like: Code → Jenkins → SonarQube → Docker → Trivy → ECR → ArgoCD → Kubernetes
-- Trivy runs after Docker builds the image.
-
-### What Trivy Scans
-1. Docker Image Scan
-- After Jenkins builds image:
-```nginx
-docker build -t app:v1 .
-```
-- Jenkins runs:
-```arduino
-trivy image app:v1
-```
-- Trivy checks:
-  - OS vulnerabilities (Alpine, Ubuntu, etc.)
-  - Installed packages
-  - CVEs (Common Vulnerabilities and Exposures)
-  
-2. Filesystem Scan (Optional)
-```nginx
-trivy fs .
-```
-Scans project files for vulnerabilities.
-
-3. Dependency Scan
-- Checks third-party libraries:
-  - npm packages
-  - pip packages
-  - Maven dependencies
-
-### Why Is This Important?
-- Because even if:
-  - Your code is clean
-  - SonarQube passes
-- Your base Docker image might contain vulnerabilities.
-- Example: You use:
-```css
-FROM ubuntu:latest
-```
-- If Ubuntu has a critical CVE → your container is vulnerable.
-- Trivy catches this before deployment.
-
-### What Happens If Trivy Finds Critical Vulnerabilities?
-- You can configure Jenkins to:
-  - Fail the pipeline
-  - Stop deployment
-  - Alert the team
-- This prevents insecure images from reaching Kubernetes.
-
-### Why Install Trivy on Jenkins Instead of Somewhere Else?
-- Because:
-  - We want security scan inside CI pipeline
-  - Automatic scanning
-  - No manual security checks
-  - Every build is verified
-- Jenkins is the CI engine, so Trivy runs there.
-
-### What Happens If We Don’t Use Trivy?
-- Vulnerable images get deployed
-- Security risks in production
-- Possible data breach
-- Compliance issues
-
 ### Install Trivy using official repo
 Step 1: Update system
 ```bash
@@ -937,13 +498,6 @@ Step 6: Verify installation
 ```bash
 trivy --version
 ```
-### What Is Helm?
-- Helm is a package manager for: Kubernetes
-- Think of Helm like:
-  - apt for Ubuntu
-  - npm for Node.js
-  - yum for Linux
-- But for Kubernetes applications.
 
 ### Why Do We Install Helm on the Jenkins Server?
 - Because Jenkins needs a way to:
