@@ -493,6 +493,13 @@ Select the Available plugins, install the following plugins and click on Install
 - Both credentials will look like this.
 <img width="720" height="149" alt="image" src="https://github.com/user-attachments/assets/c891e209-4329-46f7-ac91-5023f1e62b5f" />
 
+### What Is the Terraform Plugin in Jenkins?
+- The Terraform Plugin allows Jenkins to:
+  - Recognize Terraform as a build tool
+  - Configure Terraform versions globally
+  - Run Terraform commands more cleanly inside pipelines
+- It integrates Terraform with Jenkins
+
 ### Install Terraform Plugin via Jenkins UI
 Step 1: Open Jenkins Dashboard
 ```nginx
@@ -554,7 +561,7 @@ pipeline {
         }
         stage('Git Pulling') {
             steps {
-                git branch: 'master', url: 'https://github.com/AmanPathak-DevOps/EKS-Terraform-GitHub-Actions.git'
+                git branch: 'master', url: 'https://github.com/Damir94/Production-Ready-EKS-Clusters-with-Terraform-and-GitHub-Actions.git'
             }
         }
         stage('Init') {
