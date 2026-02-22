@@ -422,7 +422,8 @@ helm version
 - We logged into our Jenkins server.
 
 - Now, we have to configure Jenkins. So, copy the public IP of your Jenkins Server and paste it into your favourite browser on port 8080.
-<img width="833" height="779" alt="Screenshot 2026-01-30 at 10 57 33 AM" src="https://github.com/user-attachments/assets/36e715ea-1d79-4b33-afe5-79e01e6f58d3" />
+
+<img width="971" height="401" alt="Screenshot 2026-02-22 at 3 12 38 PM" src="https://github.com/user-attachments/assets/89cfce85-1013-4fb2-933f-85d204f5814e" />
 
 - Click on Install suggested plugins
 <img width="835" height="389" alt="Screenshot 2026-01-30 at 10 58 25 AM" src="https://github.com/user-attachments/assets/85a662f2-9dba-4344-99b3-8db85911a033" />
