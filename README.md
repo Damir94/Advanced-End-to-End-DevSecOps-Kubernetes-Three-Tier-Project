@@ -115,7 +115,7 @@ sudo apt update && sudo apt upgrade -y
 Step 2: Install Java (Jenkins needs Java)
 Jenkins works best with OpenJDK 17 now.
 ```bash
-sudo apt install openjdk-17-jdk -y
+sudo apt install fontconfig openjdk-21-jre
 ```
 Verify
 ```bash
@@ -134,7 +134,7 @@ echo "deb [signed-by=/etc/apt/keyrings/jenkins-keyring.asc]" \
 Step 4: Install Jenkins
 ```bash
 sudo apt update
-sudo apt install jenkins -y
+sudo apt install jenkins
 ```
 Step 5: Start & enable Jenkins
 ```bash
@@ -334,14 +334,14 @@ sudo apt-get update && sudo apt-get install -y gnupg software-properties-common
 Step 2: Add HashiCorp GPG Key
 ```bash
 wget -O- https://apt.releases.hashicorp.com/gpg | \
-  gpg --dearmor | \
-  sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+gpg --dearmor | \
+sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
 ```
 Verify the key fingerprint:
 ```bash
 gpg --no-default-keyring \
-  --keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
-  --fingerprint
+--keyring /usr/share/keyrings/hashicorp-archive-keyring.gpg \
+--fingerprint
 ```
 Step 3: Add HashiCorp Repository
 ```bash
@@ -350,7 +350,7 @@ echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashi
 Update package index and install Terraform:
 ```bash
 sudo apt update
-sudo apt-get install -y terraform
+sudo apt-get install terraform
 ```
 Verify Terraform installation:
 ```bash
