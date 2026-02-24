@@ -483,10 +483,12 @@ Select the Available plugins, install the following plugins and click on Install
 <img width="1357" height="270" alt="Screenshot 2026-01-30 at 11 06 34 AM" src="https://github.com/user-attachments/assets/815423dc-d74c-48e7-87f1-d6e627b6a0a6" />
 
 - Select AWS Credentials as Kind and add the ID same as shown in the below snippet, except for your AWS Access Key & Secret Access key, and click on Create.
-<img width="720" height="342" alt="image" src="https://github.com/user-attachments/assets/1abca0c0-b2d1-43a3-a342-9710d2d3bad5" />
+
+<img width="521" height="514" alt="Screenshot 2026-02-23 at 8 39 12 PM" src="https://github.com/user-attachments/assets/7971550d-6126-4209-8da2-a6f8fe74a4b1" />
 
 - The Credentials will look like the snippet below.
-<img width="1600" height="288" alt="image" src="https://github.com/user-attachments/assets/e7bed2eb-323b-4d8e-92d9-76599fbf27c7" />
+
+<img width="1481" height="169" alt="Screenshot 2026-02-23 at 8 39 26 PM" src="https://github.com/user-attachments/assets/1ee71a15-1157-4e2a-b2ff-598e0138e80a" />
 
 ### We have to set our GitHub credentials on Jenkins
 - Go to Manage Plugins and click on Credentials
@@ -497,10 +499,11 @@ Select the Available plugins, install the following plugins and click on Install
 - Click on Create.
 - The Credentials will look like the snippet below.
 
-<img width="1600" height="680" alt="image" src="https://github.com/user-attachments/assets/cff93a30-ac62-428f-8d1e-73341ea41bcf" />
+<img width="535" height="515" alt="Screenshot 2026-02-23 at 8 40 28 PM" src="https://github.com/user-attachments/assets/242932b9-5da8-4ee6-9285-91e98e0f28ff" />
 
 - Both credentials will look like this.
-<img width="720" height="149" alt="image" src="https://github.com/user-attachments/assets/c891e209-4329-46f7-ac91-5023f1e62b5f" />
+
+<img width="1507" height="255" alt="Screenshot 2026-02-23 at 8 40 40 PM" src="https://github.com/user-attachments/assets/620b39bf-0543-4bfe-a79f-72ed2f6ce3ac" />
 
 ### What Is the Terraform Plugin in Jenkins?
 - The Terraform Plugin allows Jenkins to:
@@ -520,6 +523,8 @@ Step 2: Install Plugin
   - Install: Terraform Plugin (by HashiCorp)
   - Check “Restart Jenkins after install”
 
+<img width="1393" height="242" alt="Screenshot 2026-02-23 at 8 41 03 PM" src="https://github.com/user-attachments/assets/b1f4d975-9109-4f1f-a7a4-dfdd377be677" />
+
 Step 3: Configure Terraform Installation
 After restart:
 ```nginx
@@ -533,6 +538,8 @@ Step 4: Use system-installed Terraform
 ```bash
 /usr/bin/terraform
 ```
+
+<img width="1494" height="519" alt="Screenshot 2026-02-23 at 8 42 39 PM" src="https://github.com/user-attachments/assets/956c17af-a54f-40a6-93a2-152b44f0d50e" />
 
 ### We will deploy our EKS Cluster with help of Jenkins file 
 Big Picture (what we’re building)
@@ -626,6 +633,8 @@ Step 3: Create Jenkins Pipeline Job
   - Select: Pipeline
   - Click OK
 
+<img width="1075" height="282" alt="Screenshot 2026-02-23 at 8 45 39 PM" src="https://github.com/user-attachments/assets/659d3f47-eab5-4a6d-b803-ff48d1ae2954" />
+
 Step 4: Configure Pipeline Job
   - Under Pipeline section:
   - Definition: Pipeline script from SCM
@@ -635,13 +644,27 @@ Step 4: Configure Pipeline Job
   - Script Path: Jenkinsfile
   - Save
 
-Step 5: Run the Pipeline
+<img width="1255" height="544" alt="Screenshot 2026-02-23 at 8 46 31 PM" src="https://github.com/user-attachments/assets/056285e9-761c-4c2c-bcda-db4f6098d6bf" />
+
+<img width="1178" height="456" alt="Screenshot 2026-02-23 at 8 46 55 PM" src="https://github.com/user-attachments/assets/876c9d20-5845-4a56-95f9-179cc0563e6d" />
+
+Step 5: Before running the Pipeline. Create S3 bucker and DynamoDB manually through AWS console. 
+
+<img width="1253" height="358" alt="Screenshot 2026-02-23 at 8 49 28 PM" src="https://github.com/user-attachments/assets/354cd3f7-5295-492d-baa7-0fd4e0422db2" />
+
+
+<img width="1523" height="229" alt="Screenshot 2026-02-24 at 11 38 41 AM" src="https://github.com/user-attachments/assets/d3a71a57-2d5c-4970-ba44-e2ae74d9aba0" />
+
+Step 6: Run the Pipeline
   - Open the job → Build Now
   - Watch Console Output
   - You should see:
-      - Terraform init
       - Terraform plan
       - Terraform apply
+
+Step 7: Run terraform plan first to see any errors.
+
+<img width="1195" height="466" alt="Screenshot 2026-02-23 at 9 14 05 PM" src="https://github.com/user-attachments/assets/8ded540d-facd-4763-9ec6-b9383d2bb2a8" />
 
 ### A jump server (or bastion host)
 You need a jump server to reach an EKS cluster in a private VPC because private subnets and private endpoints are not accessible from the public internet, and the jump server acts as a secure gateway to connect to your cluster.
