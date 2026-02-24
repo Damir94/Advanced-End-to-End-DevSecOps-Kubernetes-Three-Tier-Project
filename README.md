@@ -293,6 +293,7 @@ Step 5: Verify installation
 ```bash
 eksctl version
 ```
+<img width="484" height="79" alt="Screenshot 2026-02-23 at 8 27 04 PM" src="https://github.com/user-attachments/assets/53c0c0c5-fb45-4fc6-be02-bbcb0a4ee29b" />
 
 ### Why Do We Install kubectl on the Jenkins Server?
 - Because Jenkins needs a way to:
@@ -397,6 +398,7 @@ Step 6: Verify installation
 ```bash
 trivy --version
 ```
+<img width="477" height="95" alt="Screenshot 2026-02-23 at 8 30 19 PM" src="https://github.com/user-attachments/assets/a8ec521c-67e1-41b3-a290-ae3e61af6da0" />
 
 ### Why Do We Install Helm on the Jenkins Server?
 - Because Jenkins needs a way to:
@@ -420,6 +422,7 @@ Step 3: Verify installation
 ```bash
 helm version
 ```
+<img width="420" height="57" alt="Screenshot 2026-02-23 at 8 30 55 PM" src="https://github.com/user-attachments/assets/15607142-3f5e-4454-87f0-c90733ef0e0f" />
 
 ### Configure the Jenkins
 - We logged into our Jenkins server.
@@ -429,14 +432,15 @@ helm version
 <img width="971" height="401" alt="Screenshot 2026-02-22 at 3 12 38 PM" src="https://github.com/user-attachments/assets/89cfce85-1013-4fb2-933f-85d204f5814e" />
 
 - Click on Install suggested plugins
-<img width="835" height="389" alt="Screenshot 2026-01-30 at 10 58 25 AM" src="https://github.com/user-attachments/assets/85a662f2-9dba-4344-99b3-8db85911a033" />
+<img width="968" height="486" alt="Screenshot 2026-02-23 at 8 31 53 PM" src="https://github.com/user-attachments/assets/00b545e2-dad3-4811-a5b2-f55042b36f42" />
 
 - The plugins will be installed
 <img width="836" height="213" alt="Screenshot 2026-01-30 at 10 59 00 AM" src="https://github.com/user-attachments/assets/4910a655-e3cb-4e58-a27c-e05c693b2cb9" />
 
 - After installing the plugins, continue as admin
 
-<img width="831" height="770" alt="Screenshot 2026-01-30 at 10 59 40 AM" src="https://github.com/user-attachments/assets/71931e51-7b21-4875-8a60-8dbe9e04dc50" />
+<img width="708" height="555" alt="Screenshot 2026-02-23 at 8 35 16 PM" src="https://github.com/user-attachments/assets/50e6d93a-dbfa-4091-9088-405b9f094df7" />
+
  
 - Click on Save and Finish
 - Click on Start using Jenkins
@@ -465,7 +469,8 @@ Step 1: Go to Manage Jenkins
 Select the Available plugins, install the following plugins and click on Install
   - AWS Credentials
   - Pipeline: AWS Steps
-<img width="1279" height="291" alt="Screenshot 2026-01-30 at 11 04 16 AM" src="https://github.com/user-attachments/assets/6419415c-b9fc-4210-8c04-92f630af3a05" />
+
+<img width="1281" height="362" alt="Screenshot 2026-02-23 at 8 37 23 PM" src="https://github.com/user-attachments/assets/090a4bba-4520-4552-9fef-16fac8e53a7e" />
 
 - Once both plugins are installed, restart your Jenkins service by checking the Restart Jenkins option.
 - Log in to your Jenkins Server Again
