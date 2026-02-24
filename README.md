@@ -260,6 +260,8 @@ Step 5: Verify Installation
 aws --version
 ```
 
+<img width="848" height="125" alt="Screenshot 2026-02-23 at 8 25 39 PM" src="https://github.com/user-attachments/assets/e6520482-fb93-4012-9e09-0871001d2f04" />
+
 ### Why Do We Install eksctl on the Jenkins Server?
 - Because Jenkins needs a way to:
   - Create EKS cluster
