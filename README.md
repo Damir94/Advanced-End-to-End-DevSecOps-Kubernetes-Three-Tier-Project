@@ -648,7 +648,7 @@ Step 4: Configure Pipeline Job
 
 <img width="1178" height="456" alt="Screenshot 2026-02-23 at 8 46 55 PM" src="https://github.com/user-attachments/assets/876c9d20-5845-4a56-95f9-179cc0563e6d" />
 
-Step 5: Before running the Pipeline. Create S3 bucker and DynamoDB manually through AWS console. 
+Step 5: Before running the Pipeline. Create S3 bucket and DynamoDB manually through AWS console. 
 
 <img width="1253" height="358" alt="Screenshot 2026-02-23 at 8 49 28 PM" src="https://github.com/user-attachments/assets/354cd3f7-5295-492d-baa7-0fd4e0422db2" />
 
