@@ -121,7 +121,8 @@ Verify
 ```bash
 java -version
 ```
-<img width="915" height="140" alt="Screenshot 2026-02-08 at 1 23 46 PM" src="https://github.com/user-attachments/assets/53d0be19-9cb4-4a7e-84b4-1171bbcd9875" />
+
+<img width="942" height="137" alt="Screenshot 2026-02-23 at 8 19 12 PM" src="https://github.com/user-attachments/assets/b5a158b8-b489-4598-b76a-af032dc750cb" />
 
 Step 3: Add Jenkins official repository & key
 ```bash
