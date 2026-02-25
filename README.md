@@ -760,6 +760,19 @@ kubectl get nodes
 ```
 Security note: Don’t leave long-lived access keys on a jump server if multiple people have access. Using an instance IAM role is safer.
 
+### What is AWS ALB Ingress Controller?
+The AWS ALB Ingress Controller (now called AWS Load Balancer Controller) is a Kubernetes controller that automatically creates and manages AWS Application Load Balancers (ALB) for your Kubernetes applications running in Amazon EKS. In simple words:
+- It connects Kubernetes Ingress to AWS Application Load Balancer.
+- Without it, Kubernetes doesn’t know how to create AWS ALBs automatically.
+
+So we install the AWS Load Balancer Controller to:
+- Create ALB automatically
+- Attach target groups
+- Register pods as targets
+- Manage listeners (HTTP/HTTPS)
+- Handle SSL certificates
+- Configure path-based routing
+
 ### Installing AWS ALB Ingress Controller on EKS
 This guide explains how to install the AWS ALB (AWS Load Balancer) Ingress Controller on an EKS cluster, along with the required IAM setup.
 
@@ -850,7 +863,19 @@ Step 13: Verify the Controller is Running
 kubectl get pods -n kube-system
 kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
-### For this setup, Argo CD is installed using plain Kubernetes manifests, as recommended for getting started.
+
+### What is Argo CD?
+Argo CD is a GitOps continuous delivery tool for Kubernetes. Simple meaning:
+- It automatically deploys your Kubernetes applications from Git to your cluster.
+- Git becomes the single source of truth.
+
+Argo CD:
+- Developer updates Kubernetes YAML in Git
+- Argo CD detects change
+- Automatically deploys to EKS
+- Keeps cluster always synced with Git
+
+### Argo CD is installed using plain Kubernetes manifests, as recommended for getting started.
 Install Argo CD
 Step 1: Create the Argo CD Namespace
 ```bash
@@ -921,6 +946,18 @@ Step 6: Click on Generate
 Step 7: Copy the token, keep it somewhere safe and click on Done.
 
 <img width="720" height="215" alt="image" src="https://github.com/user-attachments/assets/c9f312a1-eb5e-4f75-b35c-b92459debe7e" />
+
+### What is a SonarQube Webhook?
+- A webhook is just: A way for one system to automatically notify another system when something happens.
+- So, SonarQube Webhook = When code analysis finishes, SonarQube automatically sends the result (pass/fail) to another system (like Jenkins).
+- No manual checking needed.
+
+With webhook:
+  - Jenkins triggers Sonar scan
+  - SonarQube analyzes code
+  - SonarQube sends result to Jenkins via webhook
+  - Jenkins continues pipeline ONLY if Quality Gate passed
+  - Automatic + safe.
 
 Now, we have to configure webhooks for quality checks.
 
