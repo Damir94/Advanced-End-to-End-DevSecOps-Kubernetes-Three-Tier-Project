@@ -980,6 +980,17 @@ Step 11: Here, you can see the webhook.
 
 <img width="1600" height="326" alt="image" src="https://github.com/user-attachments/assets/3a0e64d4-82c2-489f-a0ce-2021b6c0875c" />
 
+### What is a Project in SonarQube?
+- In SonarQube, a Project is a container that represents one application’s source code for analysis.
+- It stores:
+  - Source code analysis results
+  - Bugs
+  - Vulnerabilities
+  - Code smells
+  - Quality Gate status
+  - History of scans
+  - Think of it like: A folder that tracks the health of one application.
+
 Step 11: We will create a Project for the frontend code. Click on Manually.
 
 <img width="720" height="260" alt="image" src="https://github.com/user-attachments/assets/d492103c-e097-4d6e-af46-a5b93c80c471" />
@@ -1000,9 +1011,9 @@ Step 15: Select Other and Linux as OS.
 
 <img width="720" height="347" alt="image" src="https://github.com/user-attachments/assets/90b26a17-3f1c-4b5a-8206-6d943729b86a" />
 
-After performing the above steps, you will get the command, which you can see in the snippet above.
+- After performing the above steps, you will get the command, which you can see in the snippet above.
 
-Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
+- Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
 
 Step 16: We will create a Project for the backend code. Click on Create Project.
 
@@ -1024,11 +1035,18 @@ Step 20: Select Other and Linux as OS.
 
 <img width="720" height="347" alt="image" src="https://github.com/user-attachments/assets/5b40135f-eeb2-4dc4-8f05-82c676f6cb4f" />
 
-After performing the above steps, you will get the command, which you can see in the snippet above.
+- After performing the above steps, you will get the command, which you can see in the snippet above.
 
-Use the command in the Jenkins Backend Pipeline where Code Quality Analysis will be performed.
+- Use the command in the Jenkins Backend Pipeline where Code Quality Analysis will be performed.
 
-### We will store Sonar credentials.
+### Why Do We Store SonarQube Credentials in Jenkins?
+- Because Jenkins must authenticate to SonarQube to:
+  - Send code for analysis
+  - Retrieve Quality Gate result
+  - Communicate securely
+- Without credentials → Jenkins cannot talk to SonarQube.
+
+### We will store Sonarqube credentials.
 
 Step 1: Go to Dashboard -> Manage Jenkins -> Credentials
 
