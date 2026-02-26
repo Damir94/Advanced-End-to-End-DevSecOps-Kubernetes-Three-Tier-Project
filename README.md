@@ -1181,7 +1181,7 @@ Step 3: Provide the name as it is, then in the Server URL, copy the SonarQube pu
 
 <img width="720" height="365" alt="image" src="https://github.com/user-attachments/assets/92940f17-12cb-4b12-9b66-bf2e6cf5b73a" />
 
-##### We create separate Jenkins pipelines for frontend and backend because they are independent services with different build processes, dependencies, and deployment lifecycles. Separate pipelines allow independent versioning, faster builds, easier troubleshooting, and safer deployments. This aligns with microservices and DevSecOps best practices by enabling modular, scalable, and secure CI/CD automation.
+#### We create separate Jenkins pipelines for frontend and backend because they are independent services with different build processes, dependencies, and deployment lifecycles. Separate pipelines allow independent versioning, faster builds, easier troubleshooting, and safer deployments. This aligns with microservices and DevSecOps best practices by enabling modular, scalable, and secure CI/CD automation.
 
 ### We are ready to create our Jenkins Pipeline to deploy our Backend Code.
 
