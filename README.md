@@ -1057,6 +1057,9 @@ Step 3: Click on Create
 <img width="1600" height="559" alt="image" src="https://github.com/user-attachments/assets/66bbd523-1673-4366-8a11-eb3a9d3aa097" />
 
 ### We will store the GitHub Personal access token to push the deployment file, which will be modified in the pipeline itself for the ECR image.
+- A Personal Access Token (PAT) is a secure way to authenticate with GitHub without using your username/password.
+  - It allows Jenkins (or any automation tool) to push, pull, or manage repositories.
+  - You can limit the permissions (scopes) of the token, e.g., only allow write to a specific repo.
 
 Step 1: Add GitHub credentials
 
@@ -1068,7 +1071,8 @@ Note: If you haven’t generated your token, you generate it first, then paste i
 
 <img width="1600" height="559" alt="image" src="https://github.com/user-attachments/assets/ac36f771-b49d-4a8e-bdb8-ca54aeefd1c5" />
 
-### According to our Pipeline, we will add an AWS Account ID in the Jenkins credentials because of the ECR repo URI.
+### According to our Pipeline, we will add an AWS Account ID in the Jenkins credentials because of the ECR repo URI. 
+- When Jenkins needs to push Docker images to ECR (Elastic Container Registry), it must authenticate with AWS.
 
 Step 1: Select the kind as Secret text, paste your AWS Account ID in Secret and keep other things as it is.
 
@@ -1077,6 +1081,7 @@ Step 2: Click on Create
 <img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/a6ff10f7-48e6-4940-a6b9-bb7a4b5a3aab" />
 
 ### We will create Amazon ECR Private Repositories for both Tiers (Frontend & Backend)
+- In our DevSecOps Kubernetes three-tier project, we created separate AWS ECR repositories for frontend and backend services because each tier has its own Docker image, versioning, and deployment lifecycle. ECR acts as a secure container image registry that stores the built images from Jenkins and allows EKS to pull them during deployment. This separation improves scalability, version control, rollback capability, and aligns with microservices and DevSecOps best practices.
 
 Step 1: Click on Create repository
 
@@ -1115,6 +1120,7 @@ Step 2: Click on Create
 <img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/8de64a75-0337-479e-8bfa-e62674bbe344" />
 
 ### Install the required plugins and configure the plugins to deploy our Three-Tier Application
+- We install required Jenkins plugins such as Docker, NodeJS, OWASP Dependency-Check, SonarQube Scanner, and Eclipse Temurin to enable our CI/CD pipeline to build, scan, containerize, and deploy our three-tier application. Each plugin supports a specific stage in the DevSecOps lifecycle—code compilation, security scanning, container image creation, and integration with external tools. Without these plugins, Jenkins would not be able to automate the secure build and deployment process to EKS.
 
 Step 1: Install the following plugins by going to Dashboard -> Manage Jenkins -> Plugins -> Available Plugins
 ```bash
@@ -1128,7 +1134,6 @@ NodeJS
 OWASP Dependency-Check
 SonarQube Scanner
 ```
-
 <img width="720" height="338" alt="image" src="https://github.com/user-attachments/assets/d4ddacb0-ffb8-4d1b-831c-017546638c3e" />
 
 ### We will configure the installed plugins.
@@ -1175,6 +1180,8 @@ Step 2: Search for SonarQube installations
 Step 3: Provide the name as it is, then in the Server URL, copy the SonarQube public IP (same as Jenkins) with port 9000, select the Sonar token that we have added recently, and click on Apply & Save.
 
 <img width="720" height="365" alt="image" src="https://github.com/user-attachments/assets/92940f17-12cb-4b12-9b66-bf2e6cf5b73a" />
+
+##### We create separate Jenkins pipelines for frontend and backend because they are independent services with different build processes, dependencies, and deployment lifecycles. Separate pipelines allow independent versioning, faster builds, easier troubleshooting, and safer deployments. This aligns with microservices and DevSecOps best practices by enabling modular, scalable, and secure CI/CD automation.
 
 ### We are ready to create our Jenkins Pipeline to deploy our Backend Code.
 
