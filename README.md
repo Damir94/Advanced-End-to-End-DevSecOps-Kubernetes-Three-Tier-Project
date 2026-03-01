@@ -1470,6 +1470,7 @@ Step 4: If your Connection Status is Successful, it means the repository connect
 <img width="1600" height="207" alt="image" src="https://github.com/user-attachments/assets/de91ba8d-c55f-400c-bc61-44e4644fdfa2" />
 
 ### we will create our first application, which will be a database.
+- The database tier provides persistent storage for the application. It is deployed as a StatefulSet with persistent volumes and accessed internally via a ClusterIP service. The backend connects securely using Kubernetes Secrets. This separation ensures scalability, security, and maintainability in a three-tier architecture.
 
 Step 1: We will create namaspace called three-tier in the eks cluste manually through jump server:
 ```bash
