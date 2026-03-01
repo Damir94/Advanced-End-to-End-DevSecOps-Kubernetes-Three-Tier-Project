@@ -1449,7 +1449,8 @@ Step 5: Click Apply & Save.
 <img width="720" height="323" alt="image" src="https://github.com/user-attachments/assets/feb81290-cc92-4c1c-99cf-3966e1aedbb0" />
 
 ### We will deploy our Three-Tier Application using ArgoCD.
-As our repository is private. So, we need to configure the Private Repository in ArgoCD.
+- As our repository is private. So, we need to configure the Private Repository in ArgoCD. 
+- ArgoCD implements GitOps-based continuous deployment. Jenkins handles CI and updates Kubernetes manifests with new image tags, while ArgoCD continuously monitors the Git repository and synchronizes changes to the EKS cluster. This ensures automated, secure, and auditable deployments with drift detection and easy rollback.”
 
 Step 1: Click on Settings and select Repositories
 
