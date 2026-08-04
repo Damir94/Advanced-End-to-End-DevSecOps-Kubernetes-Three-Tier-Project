@@ -1218,7 +1218,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+                git credentialsId: 'GITHUB', url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
             }
         }
         stage('Sonarqube Analysis') {
@@ -1281,7 +1281,7 @@ pipeline {
         }
         stage('Checkout Code') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+                git credentialsId: 'GITHUB', url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
             }
         }
         stage('Update Deployment file') {
@@ -1349,7 +1349,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+                git credentialsId: 'GITHUB', url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
             }
         }
         stage('Sonarqube Analysis') {
@@ -1412,7 +1412,7 @@ pipeline {
         }
         stage('Checkout Code') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/AmanPathak-DevOps/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+                git credentialsId: 'GITHUB', url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
             }
         }
         stage('Update Deployment file') {
