@@ -1,4 +1,3 @@
-
 ## Advanced End-to-End DevSecOps Kubernetes Three-Tier Project using Terraform, AWS EKS, ArgoCD, Prometheus, Grafana, and Jenkins
 
 <img width="1024" height="1536" alt="End-to-end-project-diagram" src="https://github.com/user-attachments/assets/3474c0a9-c47c-4598-8864-34161e680fe5" />
