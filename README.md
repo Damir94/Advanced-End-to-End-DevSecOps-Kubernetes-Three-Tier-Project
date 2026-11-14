@@ -701,6 +701,8 @@ You need a jump server to reach an EKS cluster in a private VPC because private 
 4. Choose Instance Type
   - Select t2.medium
 
+<img width="1241" height="674" alt="Screenshot 2026-11-14 at 4 30 47 PM" src="https://github.com/user-attachments/assets/e6cddb6c-55d6-4065-96dc-ecc6f750c375" />
+
 5. Create or Select a Key Pair
   - This is required to SSH into EC2.
   - Click Create new key pair
@@ -708,21 +710,32 @@ You need a jump server to reach an EKS cluster in a private VPC because private 
   - Download the .pem file
   - Save it safely — you can’t download it again.
 
+<img width="1263" height="443" alt="Screenshot 2026-11-14 at 4 31 27 PM" src="https://github.com/user-attachments/assets/039da6d4-cb0f-4b4d-bada-d1a866f45325" />
+
 6. Network Settings (Important)
   - Click Edit under Network settings:
   - VPC: Choose EKS cluster VPC
   - Subnet: Any public subnet from EKS cluster VPC
   - Auto-assign public IP: Enable
   - Security Group: None
-      
+
+<img width="1211" height="670" alt="Screenshot 2026-11-14 at 4 34 08 PM" src="https://github.com/user-attachments/assets/f6a6f5ea-837f-497b-83c3-d60b1292d370" />
+
 7. Storage
   - Make it 30G
 
+<img width="1238" height="557" alt="Screenshot 2026-11-14 at 4 34 38 PM" src="https://github.com/user-attachments/assets/4a21a676-8711-4d75-8305-4cd6190186f2" />
+
 8. Add adminstrator access to the jump server through IAM role in the IAM instance profile
+
+<img width="1192" height="269" alt="Screenshot 2026-11-14 at 4 35 12 PM" src="https://github.com/user-attachments/assets/e4f1f9d1-8b94-4701-b3dc-2f9c502bb78e" />
 
 9. Launch Instance 
   - Click Launch instance
   - Your EC2 will be running in ~30–60 seconds.
+
+<img width="1597" height="216" alt="Screenshot 2026-11-14 at 4 36 10 PM" src="https://github.com/user-attachments/assets/9df7e09b-44cd-434e-985a-f721613a7307" />
+
 10. We need to install AWS CLI, kubectl, helm on the jump server
 #### Installing AWS CLI
 ```bash
@@ -731,6 +744,9 @@ sudo apt install unzip -y
 unzip awscliv2.zip
 sudo ./aws/install
 ```
+
+<img width="1318" height="146" alt="Screenshot 2026-11-14 at 4 39 30 PM" src="https://github.com/user-attachments/assets/1368e85d-3059-4f91-bf9c-311c9efe3fb8" />
+
 #### Installing Kubectl
 ```bash
 sudo apt update
@@ -740,6 +756,9 @@ sudo chmod +x kubectl
 sudo mv kubectl /usr/local/bin/
 kubectl version --client
 ```
+
+<img width="669" height="157" alt="Screenshot 2026-11-14 at 4 40 24 PM" src="https://github.com/user-attachments/assets/bdbd9874-7489-4c93-a94a-270042053eec" />
+
 #### Installing Helm
 ```bash
 sudo snap install helm --classic
@@ -750,6 +769,9 @@ curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/d
 sudo mv /tmp/eksctl /usr/local/bin
 eksctl version
 ```
+
+<img width="795" height="113" alt="Screenshot 2026-11-14 at 4 41 23 PM" src="https://github.com/user-attachments/assets/9999a7d7-9ced-4424-af34-7c1431c76d2f" />
+
 ### Verify your jump server can reach the EKS cluster
 Step 1: Provide  aws credentials and run this on jump server:
 ```bash
@@ -765,6 +787,9 @@ Step 2: After configuring, you can run:
 aws eks --region <region> update-kubeconfig --name <cluster-name>
 kubectl get nodes
 ```
+
+<img width="921" height="125" alt="Screenshot 2026-11-14 at 4 44 02 PM" src="https://github.com/user-attachments/assets/a63aab9f-4ca8-45bc-b713-f23d77ff2353" />
+
 Security note: Don’t leave long-lived access keys on a jump server if multiple people have access. Using an instance IAM role is safer.
 
 ### What is AWS ALB Ingress Controller?
@@ -823,6 +848,9 @@ Step 8: Verify Service Account is create by running:
 ```bash
 kubectl get sa -n kube-system
 ```
+
+<img width="711" height="115" alt="Screenshot 2026-11-14 at 4 52 38 PM" src="https://github.com/user-attachments/assets/7d108139-e417-4736-8067-d73fb78e1c48" />
+
 If there is no Service Account created, go to the AWS CloudFormation and delete service account
 
 <img width="1217" height="425" alt="Screenshot 2026-02-09 at 11 37 24 AM" src="https://github.com/user-attachments/assets/f1384b43-d7d3-41d0-ace7-ce14c35168de" />
@@ -853,7 +881,8 @@ helm repo add eks https://aws.github.io/eks-charts
 helm repo update eks
 helm repo list
 ```
-<img width="826" height="231" alt="Screenshot 2026-02-09 at 11 46 09 AM" src="https://github.com/user-attachments/assets/0eb345b2-69f8-4fca-9a47-ea4afda96c6a" />
+
+<img width="984" height="269" alt="Screenshot 2026-11-14 at 5 00 35 PM" src="https://github.com/user-attachments/assets/2f04a802-2799-4766-8c75-50d823d3dbf5" />
 
 Step 12: Install the ALB Controller
 ```bash
@@ -865,11 +894,18 @@ helm install aws-load-balancer-controller eks/aws-load-balancer-controller \
   --set region=<region> \
   --set vpcId=<your-vpc-id>
 ```
+
+<img width="469" height="234" alt="Screenshot 2026-11-14 at 5 04 02 PM" src="https://github.com/user-attachments/assets/bd9d6b8f-a53a-4ceb-b234-f129f8a46952" />
+
 Step 13: Verify the Controller is Running
 ```bash
 kubectl get pods -n kube-system
 kubectl get deployment -n kube-system aws-load-balancer-controller
 ```
+
+<img width="933" height="329" alt="Screenshot 2026-11-14 at 5 04 42 PM" src="https://github.com/user-attachments/assets/ee5cbd17-f017-4d95-9070-db9cdad9a3c2" />
+
+<img width="1052" height="110" alt="Screenshot 2026-11-14 at 5 05 14 PM" src="https://github.com/user-attachments/assets/03fe0369-ddfa-4bf4-8e79-708c24ddc5ad" />
 
 ### What is Argo CD?
 Argo CD is a GitOps continuous delivery tool for Kubernetes. Simple meaning:
@@ -896,27 +932,38 @@ Step 3: Verify Installation
 ```bash
 kubectl get pods -n argocd
 ```
+
+<img width="1007" height="292" alt="Screenshot 2026-11-14 at 5 07 00 PM" src="https://github.com/user-attachments/assets/f30e75d8-072f-4f56-99b3-14c085f98834" />
+
 Step 4: Check Services:
 ```bash
 kubectl get svc -n argocd
 ```
+
+<img width="1337" height="294" alt="Screenshot 2026-11-14 at 5 07 28 PM" src="https://github.com/user-attachments/assets/b47b414d-252c-406e-bfce-d3d703194b9b" />
+
 Step 5: Expose Argo CD UI
 ```bash
 kubectl edit svc argocd-server -n argocd
 ```
 Change: type: ClusterIP to type: LoadBalancer
 
-<img width="420" height="146" alt="image" src="https://github.com/user-attachments/assets/27a93ad8-5e58-42e5-8373-dcc6078acab7" />
+:<img width="482" height="233" alt="Screenshot 2026-11-14 at 5 08 25 PM" src="https://github.com/user-attachments/assets/00f501db-bb78-4f98-a7a1-44da4ac7fa0d" />
 
 Step 6: Then verify and loadbalancer dns name:
 ```bash
 kubectl get svc -n argocd
 ```
+
+<img width="1454" height="88" alt="Screenshot 2026-11-14 at 5 10 12 PM" src="https://github.com/user-attachments/assets/4a0ddd00-05a5-43c4-b687-a4e16204113a" />
+
 Step 7: Login to Argo CD
 ```bash
 kubectl get secrets -n argocd
 ```
-Look for: argocd-initial-admin-secret
+- Look for: argocd-initial-admin-secret
+
+<img width="638" height="180" alt="Screenshot 2026-11-14 at 5 10 41 PM" src="https://github.com/user-attachments/assets/935a4f4d-d117-43e1-bdea-4b696097a2fd" />
 
 Step 8: Decode the Password
 ```bash
