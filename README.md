@@ -428,7 +428,8 @@ Step 3: Verify installation
 ```bash
 helm version
 ```
-<img width="420" height="57" alt="Screenshot 2026-02-23 at 8 30 55 PM" src="https://github.com/user-attachments/assets/15607142-3f5e-4454-87f0-c90733ef0e0f" />
+
+<img width="1043" height="92" alt="Screenshot 2026-11-14 at 3 25 49 PM" src="https://github.com/user-attachments/assets/e2bbaeec-225c-4bad-a0e0-a08e4630f7c7" />
 
 ### Configure the Jenkins
 - We logged into our Jenkins server.
