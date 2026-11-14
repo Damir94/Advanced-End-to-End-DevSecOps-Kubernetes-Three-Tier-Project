@@ -1132,7 +1132,7 @@ Step 1: Select the kind as Secret text, paste your AWS Account ID in Secret and 
 
 Step 2: Click on Create
 
-<img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/a6ff10f7-48e6-4940-a6b9-bb7a4b5a3aab" />
+<img width="1871" height="559" alt="Screenshot 2026-11-14 at 5 34 45 PM" src="https://github.com/user-attachments/assets/a769632f-fe11-413e-8d59-e8b462eaf1b8" />
 
 ### We will create Amazon ECR Private Repositories for both Tiers (Frontend & Backend)
 - In our DevSecOps Kubernetes three-tier project, we created separate AWS ECR repositories for frontend and backend services because each tier has its own Docker image, versioning, and deployment lifecycle. ECR acts as a secure container image registry that stores the built images from Jenkins and allows EKS to pull them during deployment. This separation improves scalability, version control, rollback capability, and aligns with microservices and DevSecOps best practices.
