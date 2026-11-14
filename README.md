@@ -229,7 +229,7 @@ Important: Log out and log back in for the group changes to take effect. After r
 
 ## Run Docker Container of Sonarqube
 ```bash
-docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
+sudo docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
 ```
 
 ### Why Do We Install AWS CLI on the Jenkins Server?
