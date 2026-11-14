@@ -640,7 +640,7 @@ Step 3: Create Jenkins Pipeline Job
   - Select: Pipeline
   - Click OK
 
-<img width="1075" height="282" alt="Screenshot 2026-02-23 at 8 45 39 PM" src="https://github.com/user-attachments/assets/659d3f47-eab5-4a6d-b803-ff48d1ae2954" />
+<img width="883" height="236" alt="Screenshot 2026-11-14 at 3 40 27 PM" src="https://github.com/user-attachments/assets/5d51ae27-a2c8-4b68-906c-649c71caf5a6" />
 
 Step 4: Configure Pipeline Job
   - Under Pipeline section:
