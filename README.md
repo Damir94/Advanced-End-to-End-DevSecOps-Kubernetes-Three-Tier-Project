@@ -1028,11 +1028,11 @@ Step 10: Provide the name of your project and in the URL, provide the Jenkins se
 http://<jenkins-server-public-ip>:8080/sonarqube-webhook/
 ```
 
-<img width="720" height="290" alt="image" src="https://github.com/user-attachments/assets/6d04abfe-ca0b-433b-8ea2-1812c5661397" />
+<img width="1125" height="749" alt="Screenshot 2026-11-14 at 5 16 35 PM" src="https://github.com/user-attachments/assets/64e7aad4-3df7-4029-a359-aa49f42876f2" />
 
 Step 11: Here, you can see the webhook.
 
-<img width="1600" height="326" alt="image" src="https://github.com/user-attachments/assets/3a0e64d4-82c2-489f-a0ce-2021b6c0875c" />
+<img width="1500" height="466" alt="Screenshot 2026-11-14 at 5 18 58 PM" src="https://github.com/user-attachments/assets/77601e9e-a459-4f92-8d49-ea8fb2cb42a2" />
 
 ### What is a Project in SonarQube?
 - In SonarQube, a Project is a container that represents one application’s source code for analysis.
@@ -1066,7 +1066,7 @@ Step 15: Select Other and Linux as OS.
 <img width="720" height="347" alt="image" src="https://github.com/user-attachments/assets/90b26a17-3f1c-4b5a-8206-6d943729b86a" />
 
 - After performing the above steps, you will get the command, which you can see in the snippet above.
-
+- Save command somewhere for later use.
 - Now, use the command in the Jenkins Frontend Pipeline where Code Quality Analysis will be performed.
 
 Step 16: We will create a Project for the backend code. Click on Create Project.
