@@ -232,6 +232,8 @@ Important: Log out and log back in for the group changes to take effect. After r
 sudo docker run -d  --name sonar -p 9000:9000 sonarqube:lts-community
 ```
 
+<img width="1258" height="451" alt="Screenshot 2026-11-14 at 3 12 38 PM" src="https://github.com/user-attachments/assets/20e1a653-dc3b-43fc-9307-8291abd201c6" />
+
 ### Why Do We Install AWS CLI on the Jenkins Server?
 - Because Jenkins needs a way to talk to AWS.
 - The tool that allows this communication is:
