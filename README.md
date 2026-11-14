@@ -374,33 +374,37 @@ terraform --version
 - Think of Trivy like a security guard in your CI/CD pipeline.
 
 ### Install Trivy using official repo
-Step 1: Update system
+
+Step 1: Install required packages
 ```bash
-sudo apt update
+sudo apt-get update
+sudo apt-get install -y wget gnupg
 ```
-Step 2: Install required packages
+Step 2: Create the keyrings directory
 ```bash
-sudo apt install -y wget apt-transport-https gnupg lsb-release
+sudo mkdir -p /etc/apt/keyrings
 ```
-Step 3: Add Trivy GPG key
+Step 3: Download and add the Trivy GPG key
 ```bash
-wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -
+wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | \
+sudo gpg --dearmor -o /etc/apt/keyrings/trivy.gpg
 ```
-Step 4: Add Trivy repository
+Step 4: Add the Trivy repository
 ```bash
-echo deb https://aquasecurity.github.io/trivy-repo/deb \
-$(lsb_release -sc) main | sudo tee /etc/apt/sources.list.d/trivy.list
+echo "deb [signed-by=/etc/apt/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | \
+sudo tee /etc/apt/sources.list.d/trivy.list
 ```
-Step 5: Install Trivy
+Step 5: Update and install Trivy
 ```bash
-sudo apt update
-sudo apt install -y trivy
+sudo apt-get update
+sudo apt-get install -y trivy
 ```
 Step 6: Verify installation
 ```bash
 trivy --version
 ```
-<img width="477" height="95" alt="Screenshot 2026-02-23 at 8 30 19 PM" src="https://github.com/user-attachments/assets/a8ec521c-67e1-41b3-a290-ae3e61af6da0" />
+
+<img width="878" height="84" alt="Screenshot 2026-11-14 at 3 24 14 PM" src="https://github.com/user-attachments/assets/1e232b8f-ed9f-4de0-a241-af9382c5f6f6" />
 
 ### Why Do We Install Helm on the Jenkins Server?
 - Because Jenkins needs a way to:
