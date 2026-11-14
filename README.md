@@ -1143,15 +1143,15 @@ Step 1: Click on Create repository
 
 Step 2: Select the Private option to provide the repository and click on Save.
 
-<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/f45f99fa-8482-40db-80b2-f4b7cd6624db" />
+<img width="1901" height="305" alt="Screenshot 2026-11-14 at 5 40 35 PM" src="https://github.com/user-attachments/assets/4bfcf016-38e6-4343-8d94-b80568be7751" />
 
 Step 3: Do the same for the backend repository and click on Save
 
-<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/2b531e3a-9e2b-466f-8154-3043e14d6743" />
+<img width="1904" height="293" alt="Screenshot 2026-11-14 at 5 41 30 PM" src="https://github.com/user-attachments/assets/a29274d9-4037-4087-9828-897a854bd62e" />
 
 Step 4: we have set up our ECR Private Repository
 
-<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/f547c539-d518-4e8b-bdb4-cd84227d53ef" />
+<img width="1555" height="397" alt="Screenshot 2026-11-14 at 5 42 07 PM" src="https://github.com/user-attachments/assets/59b3c673-f7df-4aa3-8321-007e9c3e1ba3" />
 
 ### We will provide our ECR image name for the frontend, which is frontend only.
 
@@ -1171,7 +1171,7 @@ Step 2: Click on Create
 
 ### Final Snippet of all Credentials that we needed to implement this project.
 
-<img width="720" height="252" alt="image" src="https://github.com/user-attachments/assets/8de64a75-0337-479e-8bfa-e62674bbe344" />
+<img width="1874" height="728" alt="Screenshot 2026-11-14 at 5 45 18 PM" src="https://github.com/user-attachments/assets/0d47c1b4-f59e-4b24-8d7c-f9321486f764" />
 
 ### Install the required plugins and configure the plugins to deploy our Three-Tier Application
 - We install required Jenkins plugins such as Docker, NodeJS, OWASP Dependency-Check, SonarQube Scanner, and Eclipse Temurin to enable our CI/CD pipeline to build, scan, containerize, and deploy our three-tier application. Each plugin supports a specific stage in the DevSecOps lifecycle—code compilation, security scanning, container image creation, and integration with external tools. Without these plugins, Jenkins would not be able to automate the secure build and deployment process to EKS.
@@ -1188,7 +1188,8 @@ NodeJS
 OWASP Dependency-Check
 SonarQube Scanner
 ```
-<img width="720" height="338" alt="image" src="https://github.com/user-attachments/assets/d4ddacb0-ffb8-4d1b-831c-017546638c3e" />
+
+<img width="1547" height="919" alt="Screenshot 2026-11-14 at 5 47 39 PM" src="https://github.com/user-attachments/assets/7df8c098-3c48-488a-b330-f6f2248cd830" />
 
 ### We will configure the installed plugins.
 
@@ -1205,25 +1206,25 @@ Step 3: Search for JDK and provide the configuration like the snippet below.
 
 Step 1: Search for the SonarQube scanner and provide the configuration like the snippet below.
 
-<img width="720" height="266" alt="image" src="https://github.com/user-attachments/assets/59dbb3a6-2973-4d38-86a4-e26652855729" />
+<img width="1672" height="606" alt="Screenshot 2026-11-14 at 5 56 20 PM" src="https://github.com/user-attachments/assets/e5dbf0eb-cfac-49a3-8344-e2311b207f6c" />
 
 ### We will configure nodejs
 
 Step 1: Search for the node and provide the configuration, like the snippet below.
 
-<img width="720" height="369" alt="image" src="https://github.com/user-attachments/assets/67ef012c-6014-4382-8120-bc74a1c8a573" />
+<img width="1582" height="796" alt="Screenshot 2026-11-14 at 5 56 58 PM" src="https://github.com/user-attachments/assets/588a8e11-6252-48cb-899a-e70252b519f1" />
 
 ### We will configure the OWASP Dependency Check
 
 Step 1: Search for Dependency-Check and provide the configuration like the snippet below.
 
-<img width="720" height="272" alt="image" src="https://github.com/user-attachments/assets/7d96b612-b67a-4612-9d84-fd0c80db42ca" />
+<img width="1647" height="637" alt="Screenshot 2026-11-14 at 5 57 27 PM" src="https://github.com/user-attachments/assets/cb9093b0-8ab4-4666-90dd-3a70fde02f22" />
 
 ### we will configure the Docker
 
 Step 1: Search for Docker and provide the configuration like the snippet below.
 
-<img width="720" height="272" alt="image" src="https://github.com/user-attachments/assets/f379122e-1d2c-4293-93ed-b65f8e4ef7aa" />
+<img width="1625" height="611" alt="Screenshot 2026-11-14 at 5 57 49 PM" src="https://github.com/user-attachments/assets/44735fe4-2832-43e2-8002-0df18fd6ea10" />
 
 ### We will set the path for SonarQube in Jenkins
 
@@ -1233,7 +1234,7 @@ Step 2: Search for SonarQube installations
 
 Step 3: Provide the name as it is, then in the Server URL, copy the SonarQube public IP (same as Jenkins) with port 9000, select the Sonar token that we have added recently, and click on Apply & Save.
 
-<img width="720" height="365" alt="image" src="https://github.com/user-attachments/assets/92940f17-12cb-4b12-9b66-bf2e6cf5b73a" />
+<img width="1663" height="656" alt="Screenshot 2026-11-14 at 6 03 55 PM" src="https://github.com/user-attachments/assets/404fcd6a-9822-4ba2-a765-4520e1dfa3b6" />
 
 #### We create separate Jenkins pipelines for frontend and backend because they are independent services with different build processes, dependencies, and deployment lifecycles. Separate pipelines allow independent versioning, faster builds, easier troubleshooting, and safer deployments. This aligns with microservices and DevSecOps best practices by enabling modular, scalable, and secure CI/CD automation.
 
@@ -1243,7 +1244,7 @@ Step 1: Go to Jenkins Dashboard
 
 Step 2: Click on New Item
 
-<img width="720" height="154" alt="image" src="https://github.com/user-attachments/assets/956be226-dc19-40a1-b79f-33090e2c3410" />
+<img width="966" height="352" alt="Screenshot 2026-11-14 at 6 09 45 PM" src="https://github.com/user-attachments/assets/06fd704b-ecf8-46d6-ad3e-47657b0e3d1a" />
 
 Step 3: Provide the name of your Pipeline and click on OK.
 
@@ -1259,7 +1260,7 @@ pipeline {
     }
     environment  {
         SCANNER_HOME=tool 'sonar-scanner'
-        AWS_ACCOUNT_ID = credentials('ACCOUNT_ID')
+        AWS_ACCOUNT_ID = credentials('Account_ID')
         AWS_ECR_REPO_NAME = credentials('ECR_REPO2')
         AWS_DEFAULT_REGION = 'us-east-1'
         REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
@@ -1280,8 +1281,8 @@ pipeline {
                 dir('Application-Code/backend') {
                     withSonarQubeEnv('sonar-server') {
                         sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=backend \
-                        -Dsonar.projectKey=backend '''
+                        -Dsonar.projectName=three-tier-backend\
+                        -Dsonar.projectKey=three-tier-backend '''
                     }
                 }
             }
@@ -1340,15 +1341,15 @@ pipeline {
         }
         stage('Update Deployment file') {
             environment {
-                GIT_REPO_NAME = "End-to-End-Kubernetes-Three-Tier-DevSecOps-Project"
-                GIT_USER_NAME = "AmanPathak-DevOps"
+                GIT_REPO_NAME = "Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project"
+                GIT_USER_NAME = "Damir94"
             }
             steps {
                 dir('Kubernetes-Manifests-file/Backend') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
-                            git config user.email "aman07pathak@gmail.com"
-                            git config user.name "AmanPathak-DevOps"
+                            git config user.email "abdurakhimov.da@gmail.com"
+                            git config user.name "Damir94"
                             BUILD_NUMBER=${BUILD_NUMBER}
                             echo $BUILD_NUMBER
                             imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
@@ -1356,7 +1357,7 @@ pipeline {
                             sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
                             git add deployment.yaml
                             git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:master
+                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
                         '''
                     }
                 }
