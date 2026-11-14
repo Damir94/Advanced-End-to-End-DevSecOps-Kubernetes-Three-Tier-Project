@@ -671,7 +671,7 @@ Step 6: Run the Pipeline
 
 Step 7: Run terraform plan first to see any errors.
 
-<img width="1121" height="652" alt="Screenshot 2026-11-14 at 3 53 43 PM" src="https://github.com/user-attachments/assets/a1da2269-92b0-4101-a141-814b47c89e48" />
+<img width="1313" height="870" alt="Screenshot 2026-11-14 at 4 29 23 PM" src="https://github.com/user-attachments/assets/9d32a8f6-2e89-4879-9b4b-54231d26a421" />
 
 ### A jump server (or bastion host)
 You need a jump server to reach an EKS cluster in a private VPC because private subnets and private endpoints are not accessible from the public internet, and the jump server acts as a secure gateway to connect to your cluster.
