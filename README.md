@@ -1477,7 +1477,7 @@ Step 2: Click on New Item
 
 Step 3: Provide the name of your Pipeline and click on OK.
 
-<img width="720" height="222" alt="image" src="https://github.com/user-attachments/assets/466a6c4e-2080-47f0-a2f6-8a5d7678f31a" />
+<img width="1030" height="403" alt="Screenshot 2026-11-15 at 2 39 14 PM" src="https://github.com/user-attachments/assets/8bc7fdd0-5e5d-4f30-a383-27c4ac4754be" />
 
 Step 4: This is the Jenkins file to deploy the Frontend Code on EKS. Copy and paste it into the Jenkins
 ```groovy
@@ -1668,7 +1668,7 @@ Step 5: Click Apply & Save.
 - Our pipeline was successful after a few common mistakes.
 - Note: Do the changes in the Pipeline according to your project.
 
-<img width="720" height="323" alt="image" src="https://github.com/user-attachments/assets/feb81290-cc92-4c1c-99cf-3966e1aedbb0" />
+<img width="1883" height="601" alt="Screenshot 2026-11-15 at 2 38 49 PM" src="https://github.com/user-attachments/assets/b86b5ea2-dc4a-4a04-89fa-63c80462a36d" />
 
 ### We will deploy our Three-Tier Application using ArgoCD.
 - As our repository is private. So, we need to configure the Private Repository in ArgoCD. 
