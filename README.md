@@ -45,12 +45,16 @@ In the diagram, Jenkins sits between:
 4. Choose Instance Type
   - Select t2.2xlarge
 
+<img width="1245" height="751" alt="Screenshot 2026-11-15 at 12 45 26 PM" src="https://github.com/user-attachments/assets/76e7bfad-77d9-482d-8f11-beff09a27d37" />
+
 5. Create or Select a Key Pair
   - This is required to SSH into EC2.
   - Click Create new key pair
   - Name it (example: ec2-key)
   - Download the .pem file
   - Save it safely — you can’t download it again.
+
+<img width="1233" height="447" alt="Screenshot 2026-11-15 at 12 46 13 PM" src="https://github.com/user-attachments/assets/40a7173b-ee75-4f50-87ac-975d3a07dcaf" />
 
 6. Network Settings (Important)
   - Click Edit under Network settings:
@@ -62,8 +66,13 @@ In the diagram, Jenkins sits between:
       - Allow HTTP (80) if you want a web server
       - Allow Custom TCP (8080) port for Jenkins server
       - Allow Custom TCP (9000) port Sonarqube
+
+<img width="1188" height="310" alt="Screenshot 2026-11-15 at 12 47 00 PM" src="https://github.com/user-attachments/assets/c047b65e-ffdc-43c6-84ec-d2d78dadfdcc" />
+
 7. Storage
   - Make it 30G
+
+<img width="1232" height="532" alt="Screenshot 2026-11-15 at 12 47 29 PM" src="https://github.com/user-attachments/assets/4587fdcb-dc6b-4e68-96eb-a0e222b5dcb4" />
 
 8. Launch Instance 
   - Click Launch instance
