@@ -1253,55 +1253,79 @@ Step 3: Provide the name of your Pipeline and click on OK.
 Step 4: This is the Jenkins file to deploy the Backend Code on EKS. Copy and paste it into the Jenkins
 
 ```groovy
+```groovy
 pipeline {
-    agent any 
+    agent any
+
     tools {
         nodejs 'nodejs'
     }
-    environment  {
-        SCANNER_HOME=tool 'sonar-scanner'
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
         AWS_ACCOUNT_ID = credentials('Account_ID')
         AWS_ECR_REPO_NAME = credentials('ECR_REPO2')
         AWS_DEFAULT_REGION = 'us-east-1'
-        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/"
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+        GIT_REPO_NAME = "Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project"
+        GIT_USER_NAME = "Damir94"
     }
+
     stages {
+
         stage('Cleaning Workspace') {
             steps {
                 cleanWs()
             }
         }
+
         stage('Checkout from Git') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
+                git branch: 'main',
+                    credentialsId: 'GITHUB',
+                    url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
             }
         }
-        stage('Sonarqube Analysis') {
+
+        stage('SonarQube Analysis') {
             steps {
                 dir('Application-Code/backend') {
                     withSonarQubeEnv('sonar-server') {
-                        sh ''' $SCANNER_HOME/bin/sonar-scanner \
-                        -Dsonar.projectName=three-tier-backend\
-                        -Dsonar.projectKey=three-tier-backend '''
+                        sh '''
+                            $SCANNER_HOME/bin/sonar-scanner \
+                            -Dsonar.projectName=three-tier-backend \
+                            -Dsonar.projectKey=three-tier-backend
+                        '''
                     }
                 }
             }
         }
+
         stage('Quality Check') {
             steps {
                 script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'sonar-token' 
+                    waitForQualityGate(
+                        abortPipeline: false,
+                        credentialsId: 'sonar-token'
+                    )
                 }
             }
         }
-       // stage('OWASP Dependency-Check Scan') {
-      //     steps {
-      //          dir('Application-Code/backend') {
-      //              dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-      //              dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-      //          }
-      //      }
-      //  }
+
+//        stage('OWASP Dependency-Check Scan') {
+//            steps {
+//                dir('Application-Code/backend') {
+//                    dependencyCheck(
+//                        additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit',
+//                        odcInstallation: 'DP-Check'
+//                    )
+//                    dependencyCheckPublisher(
+//                        pattern: '**/dependency-check-report.xml'
+//                    )
+//                }
+//            }
+//        }
+
         stage('Trivy File Scan') {
             steps {
                 dir('Application-Code/backend') {
@@ -1309,62 +1333,104 @@ pipeline {
                 }
             }
         }
-        stage("Docker Image Build") {
+
+        stage('Docker Image Build') {
             steps {
-                script {
-                    dir('Application-Code/backend') {
-                            sh 'docker system prune -f'
-                            sh 'docker container prune -f'
-                            sh 'docker build -t ${AWS_ECR_REPO_NAME} .'
-                    }
+                dir('Application-Code/backend') {
+                    sh '''
+                        docker system prune -f
+                        docker container prune -f
+                        docker build -t ${AWS_ECR_REPO_NAME} .
+                    '''
                 }
             }
         }
-        stage("ECR Image Pushing") {
+
+        stage('ECR Image Pushing') {
             steps {
-                script {
-                        sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}'
-                        sh 'docker tag ${AWS_ECR_REPO_NAME} ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
-                        sh 'docker push ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
-                }
+                sh '''
+                    aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | \
+                    docker login --username AWS --password-stdin ${REPOSITORY_URI}
+
+                    docker tag ${AWS_ECR_REPO_NAME} \
+                    ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}
+
+                    docker push \
+                    ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}
+                '''
             }
         }
-        stage("TRIVY Image Scan") {
+
+        stage('Trivy Image Scan') {
             steps {
-                sh 'trivy image ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} > trivyimage.txt' 
+                sh '''
+                    trivy image \
+                    ${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER} \
+                    > trivyimage.txt
+                '''
             }
         }
+
         stage('Checkout Code') {
             steps {
-                git credentialsId: 'GITHUB', url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
+                git branch: 'main',
+                    credentialsId: 'GITHUB',
+                    url: 'https://github.com/Damir94/Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project.git'
             }
         }
-        stage('Update Deployment file') {
-            environment {
-                GIT_REPO_NAME = "Advanced-End-to-End-DevSecOps-Kubernetes-Three-Tier-Project"
-                GIT_USER_NAME = "Damir94"
-            }
+
+        stage('Update Deployment File') {
             steps {
                 dir('Kubernetes-Manifests-file/Backend') {
-                    withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
+                    withCredentials([
+                        string(credentialsId: 'GITHUB', variable: 'GITHUB_TOKEN')
+                    ]) {
                         sh '''
                             git config user.email "abdurakhimov.da@gmail.com"
                             git config user.name "Damir94"
-                            BUILD_NUMBER=${BUILD_NUMBER}
-                            echo $BUILD_NUMBER
+
+                            echo "Updating deployment image to build ${BUILD_NUMBER}"
+
                             imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
-                            echo $imageTag
-                            sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
+
+                            echo "Current image tag: ${imageTag}"
+
+                            sed -i "s|${AWS_ECR_REPO_NAME}:${imageTag}|${REPOSITORY_URI}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}|g" deployment.yaml
+
+                            echo "Updated deployment file:"
+                            cat deployment.yaml
+
                             git add deployment.yaml
-                            git commit -m "Update deployment Image to version \${BUILD_NUMBER}"
-                            git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
+
+                            if git diff --cached --quiet; then
+                                echo "No deployment changes detected."
+                            else
+                                git commit -m "Update backend deployment image to version ${BUILD_NUMBER}"
+
+                                git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME}.git HEAD:main
+                            fi
                         '''
                     }
                 }
             }
         }
     }
+
+    post {
+        always {
+            echo 'Pipeline execution completed.'
+        }
+
+        success {
+            echo 'Backend DevSecOps pipeline completed successfully!'
+        }
+
+        failure {
+            echo 'Backend DevSecOps pipeline failed. Check the Jenkins console output.'
+        }
+    }
 }
+```
 ```
 Step 5: Click Apply & Save. Click on the build.
 - Our pipeline was successful after addressing a few common mistakes.
