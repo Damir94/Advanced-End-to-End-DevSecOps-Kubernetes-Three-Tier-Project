@@ -1285,7 +1285,6 @@ Step 3: Provide the name of your Pipeline and click on OK.
 Step 4: This is the Jenkins file to deploy the Backend Code on EKS. Copy and paste it into the Jenkins
 
 ```groovy
-```groovy
 pipeline {
     agent any
 
@@ -1463,12 +1462,12 @@ pipeline {
     }
 }
 ```
-```
 Step 5: Click Apply & Save. Click on the build.
 - Our pipeline was successful after addressing a few common mistakes.
 - Note: Do the changes in the Pipeline according to your project.
 
-<img width="720" height="344" alt="image" src="https://github.com/user-attachments/assets/905277ca-a890-4b8e-b0f8-cc06bebada45" />
+<img width="1895" height="746" alt="Screenshot 2026-11-15 at 2 24 05 PM" src="https://github.com/user-attachments/assets/2317b8ba-dde4-4f67-a847-52a4aa39d401" />
+
 
 ### We are ready to create our Jenkins Pipeline to deploy our Frontend Code.
 
