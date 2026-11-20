@@ -1685,11 +1685,11 @@ Step 2: Click on CONNECT REPO USING HTTPS
 Step 3: Provide the repository name where your Manifest files are present.
 - Provide the username and GitHub Personal Access token and click on CONNECT.
 
-<img width="1600" height="628" alt="image" src="https://github.com/user-attachments/assets/ee06ccef-08e1-43e3-98e6-7ec6866cfc42" />
+<img width="1506" height="699" alt="Screenshot 2026-11-15 at 2 49 13 PM" src="https://github.com/user-attachments/assets/6e627f1c-0ed9-4302-944d-c32a432ad169" />
 
 Step 4: If your Connection Status is Successful, it means the repository connected successfully.
 
-<img width="1600" height="207" alt="image" src="https://github.com/user-attachments/assets/de91ba8d-c55f-400c-bc61-44e4644fdfa2" />
+<img width="1677" height="336" alt="Screenshot 2026-11-15 at 2 49 28 PM" src="https://github.com/user-attachments/assets/0e0f6172-c333-4245-803b-6b910a355f96" />
 
 ### we will create our first application, which will be a database.
 - The database tier provides persistent storage for the application. It is deployed as a StatefulSet with persistent volumes and accessed internally via a ClusterIP service. The backend connects securely using Kubernetes Secrets. This separation ensures scalability, security, and maintainability in a three-tier architecture.
@@ -1705,46 +1705,46 @@ Step 2: Click on CREATE APPLICATION.
 
 Step 3: Provide the details as it is provided in the snippet below and scroll down.
 
-<img width="720" height="209" alt="image" src="https://github.com/user-attachments/assets/634d4cdd-b144-4c56-ab43-bf6fd8f7e4fa" />
+<img width="1492" height="598" alt="Screenshot 2026-11-15 at 2 50 37 PM" src="https://github.com/user-attachments/assets/444964f9-7a4c-44c4-8423-c01b0633b80b" />
 
 - Select the same repository that you configured in the earlier step.
 - In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
 
 Step 4: Click on CREATE.
 
-<img width="1600" height="605" alt="image" src="https://github.com/user-attachments/assets/c26c1b02-5ccb-439e-b401-90e107dace50" />
+<img width="1491" height="808" alt="Screenshot 2026-11-15 at 2 51 32 PM" src="https://github.com/user-attachments/assets/7becfc4c-cdea-44be-bf69-0b08b6f58aec" />
 
 ### While your database Application is starting to deploy, we will create an application for the backend.
 
 Step 1: Provide the details as it is provided in the snippet below and scroll down.
 
-<img width="720" height="191" alt="image" src="https://github.com/user-attachments/assets/24b6f351-8edf-443e-95e8-666b8a75c602" />
+<img width="1509" height="552" alt="Screenshot 2026-11-15 at 2 52 37 PM" src="https://github.com/user-attachments/assets/2bf1ac1f-89ca-463f-b572-a7f81f82a5b7" />
 
 - Select the same repository that you configured in the earlier step.
 - In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
 
 Step 2: Click on CREATE.
 
-<img width="720" height="282" alt="image" src="https://github.com/user-attachments/assets/75c35724-181d-4ab4-9a17-6bf2e1bf91de" />
+<img width="1510" height="523" alt="Screenshot 2026-11-15 at 2 53 47 PM" src="https://github.com/user-attachments/assets/29b5a277-8dc3-4c19-93a5-9d743faf69e3" />
 
 ### While your backend Application is starting to deploy, we will create an application for the frontend.
 
 Step 1: Provide the details as it is provided in the snippet below and scroll down.
 
-<img width="720" height="161" alt="image" src="https://github.com/user-attachments/assets/b5ed2957-c6fd-4683-bf4d-aa93b7e3870d" />
+<img width="1484" height="515" alt="Screenshot 2026-11-15 at 2 54 49 PM" src="https://github.com/user-attachments/assets/7196bc76-d6b5-43ab-822f-d332655638ba" />
 
 - Select the same repository that you configured in the earlier step.
 - In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
 
 Step 2: Click on CREATE.
 
-<img width="720" height="272" alt="image" src="https://github.com/user-attachments/assets/53ff4114-2a40-4bd4-96a6-91222cedd745" />
+<img width="1481" height="470" alt="Screenshot 2026-11-15 at 2 55 23 PM" src="https://github.com/user-attachments/assets/da3ef4a4-116d-4123-86c2-bbd663433824" />
 
 ### While your frontend Application is starting to deploy, we will create an application for the ingress.
 
 Step 1: Provide the details as it is provided in the snippet below and scroll down.
 
-<img width="1600" height="353" alt="image" src="https://github.com/user-attachments/assets/86d1eb3a-12c8-4b43-b25c-d5f210db6a19" />
+<img width="1474" height="517" alt="Screenshot 2026-11-15 at 2 56 41 PM" src="https://github.com/user-attachments/assets/c8c5fb8d-939a-4170-ba7e-d72a602d34b8" />
 
 - Select the same repository that you configured in the earlier step.
 - In the Path, provide the location where your Manifest files are presented and provide other things as shown in the screenshot below.
@@ -1756,7 +1756,7 @@ Step 2: Click on CREATE.
 - Once your Ingress application is deployed. It will create an Application Load Balancer
 - You can check out the load balancer named k8s-three.
 
-<img width="720" height="150" alt="image" src="https://github.com/user-attachments/assets/d46d76c2-7ee6-4a11-9185-d8745ff2ee60" />
+<img width="1603" height="368" alt="Screenshot 2026-11-15 at 2 58 36 PM" src="https://github.com/user-attachments/assets/e1123a94-63ad-4f14-bd33-4f343d199d81" />
 
 - Now, copy the ALB-DNS and go to your Domain Provider. In my case, Porkbun is the domain provider.
 - Go to DNS and add a CNAME type with hostname backend, then add your ALB in the Answer and click on Save
@@ -1766,7 +1766,7 @@ Step 2: Click on CREATE.
 
 - You can see all 4 application deployments in the snippet below.
 
-<img width="720" height="365" alt="image" src="https://github.com/user-attachments/assets/885a7d28-5870-458b-96ae-853c6e94f049" />
+<img width="1670" height="589" alt="Screenshot 2026-11-15 at 2 57 39 PM" src="https://github.com/user-attachments/assets/94ffd600-7c5b-4194-9efd-53732d4c8efd" />
 
 - Hit your subdomain after 2 to 3 minutes in your browser to see the magic.
 
