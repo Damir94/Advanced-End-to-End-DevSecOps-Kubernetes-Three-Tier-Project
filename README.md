@@ -1751,8 +1751,6 @@ Step 1: Provide the details as it is provided in the snippet below and scroll do
 
 Step 2: Click on CREATE.
 
-<img width="720" height="278" alt="image" src="https://github.com/user-attachments/assets/bc50e855-d76c-4658-b7fd-d9d70511cf8b" />
-
 - Once your Ingress application is deployed. It will create an Application Load Balancer
 - You can check out the load balancer named k8s-three.
 
@@ -1762,19 +1760,17 @@ Step 2: Click on CREATE.
 - Go to DNS and add a CNAME type with hostname backend, then add your ALB in the Answer and click on Save
 - Note: I have created a subdomain backend.amanpathakdevops.study
 
-<img width="1600" height="564" alt="image" src="https://github.com/user-attachments/assets/79d2d905-c362-464e-a968-73e2de341277" />
-
 - You can see all 4 application deployments in the snippet below.
 
 <img width="1670" height="589" alt="Screenshot 2026-11-15 at 2 57 39 PM" src="https://github.com/user-attachments/assets/94ffd600-7c5b-4194-9efd-53732d4c8efd" />
 
 - Hit your subdomain after 2 to 3 minutes in your browser to see the magic.
 
-<img width="720" height="379" alt="image" src="https://github.com/user-attachments/assets/938a15a1-a0a9-4e0d-acd5-5230e4ed4b59" />
+<img width="893" height="461" alt="Screenshot 2026-11-19 at 10 54 19 PM" src="https://github.com/user-attachments/assets/c7f95c7a-27e1-49dc-922e-5060f58daddc" />
 
 - You can play with the application by adding the records.
 
-<img width="720" height="379" alt="image" src="https://github.com/user-attachments/assets/29106efe-926b-4391-b6f6-48def0b3f04e" />
+<img width="890" height="456" alt="Screenshot 2026-11-19 at 10 55 09 PM" src="https://github.com/user-attachments/assets/5db4f93a-8f3c-4699-ad3c-300b5eb56e23" />
 
 - You can play with the application by deleting the records.
 
